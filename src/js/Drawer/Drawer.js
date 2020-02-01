@@ -46,17 +46,18 @@ class DrawerSide extends Component {
   };
 
   render() {
-    const { drawerIsOpen } = this.state;
+    const { drawerIsOpen, notification } = this.state;
+    const notificationText = 'Error. Please contact system administrator';
     return (
       <>
         <Snackbar
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-            open={notification}
-            autoHideDuration={6000}
-            onClose={this.handleCloseNotification}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={notification}
+          autoHideDuration={6000}
+          onClose={this.handleCloseNotification}
         >
           <Alert onClose={this.handleCloseNotification} severity="error">
             {notificationText}
