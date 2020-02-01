@@ -1,30 +1,12 @@
 import React, { Component } from 'react';
-
-import { styled } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-
-import RoversList from '../RoversList';
-import Alert from '../Alert';
-
 import getDrawerInfo from '../api/getDrawerInfo';
-
-const NasaList = styled(List)({
-  width: 250,
-});
+import Sidebar from '../Sidebar';
+import Alert from '../Alert';
 
 class DrawerSide extends Component {
   state = {
@@ -55,44 +37,8 @@ class DrawerSide extends Component {
 
   handleSolChange = () => {};
 
-  sideList = () => (
-    <div role="presentation" onKeyDown={this.toggleDrawer(false)}>
-      <NasaList>
-        <ListItem>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Rovers:</FormLabel>
-            <FormGroup>
-              {this.state.info.map(elem => (
-                <RoversList
-                  key={elem.rover}
-                  elem={elem}
-                  handleChange={this.handleChange}
-                  handleSolChange={this.handleSolChange}
-                  optionFlags={this.state.optionFlags}
-                  solsRange={this.state.solsRange}
-                />
-              ))}
-            </FormGroup>
-            <FormHelperText>Choose mission of interest</FormHelperText>
-          </FormControl>
-        </ListItem>
-        <ListItem button onClick={this.toggleDrawer(false)}>
-          <ListItemIcon>
-            <SearchIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Search'} />
-        </ListItem>
-      </NasaList>
-      <Divider />
-    </div>
-  );
-
-  toggleDrawer = open => event => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    this.setState({ drawerIsOpen: open });
+  toggleDrawer = isOpen => {
+    this.setState({ drawerIsOpen: isOpen });
   };
 
   handleCloseNotification = () => {
@@ -100,27 +46,33 @@ class DrawerSide extends Component {
   };
 
   render() {
-    const { drawerIsOpen, notification } = this.state;
-    const notificationText = 'Error. Please contact system administrator';
+    const { drawerIsOpen } = this.state;
     return (
       <>
         <Snackbar
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          open={notification}
-          autoHideDuration={6000}
-          onClose={this.handleCloseNotification}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={notification}
+            autoHideDuration={6000}
+            onClose={this.handleCloseNotification}
         >
           <Alert onClose={this.handleCloseNotification} severity="error">
             {notificationText}
           </Alert>
         </Snackbar>
-        <Drawer open={drawerIsOpen} onClose={this.toggleDrawer(false)}>
-          {this.sideList()}
+        <Drawer open={drawerIsOpen} onClose={() => this.toggleDrawer(false)}>
+          <Sidebar
+            state={this.state}
+            handlers={{
+              handleChange: this.handleChange,
+              handleSolChange: this.handleSolChange,
+              toggleDrawer: this.toggleDrawer,
+            }}
+          />
         </Drawer>
-        <IconButton edge="start" color="inherit" aria-label="menu" onClick={this.toggleDrawer(true)}>
+        <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => this.toggleDrawer(true)}>
           <MenuIcon />
         </IconButton>
       </>

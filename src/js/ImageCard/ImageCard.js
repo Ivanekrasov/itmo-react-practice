@@ -48,6 +48,6 @@ function ImageCard(props) {
       </Card.Content>
     </Card>
   );
-}
+};
 
 export default ImageCard;

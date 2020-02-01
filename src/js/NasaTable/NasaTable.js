@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
-
 import TablePagination from '@material-ui/core/TablePagination';
 import Snackbar from '@material-ui/core/Snackbar';
 
@@ -9,7 +8,6 @@ import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
 import sorts from '../sorts/sorts';
-
 import SortSelect from '../SortSelect';
 import Alert from '../Alert';
 
@@ -43,14 +41,14 @@ class NasaTable extends Component {
       : table.filter((row, i) => i >= from && i < from + rowsRepPage);
   };
 
-  nextPage = () => {
+  switchToNextPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page + 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
     this.setState({ visibleRows, page: page + 1 });
   };
 
-  prevPage = () => {
+  switchToPrevPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page - 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
@@ -143,7 +141,7 @@ class NasaTable extends Component {
         </Snackbar>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
-          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row} />)}
+          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
@@ -156,11 +154,11 @@ class NasaTable extends Component {
             onChangeRowsPerPage={this.changeRow}
             backIconButtonProps={{
               'aria-label': 'Previous Page',
-              onClick: this.prevPage,
+              onClick: this.switchToPrevPage,
             }}
             nextIconButtonProps={{
               'aria-label': 'Next Page',
-              onClick: this.nextPage,
+              onClick: this.switchToNextPage,
             }}
             onChangePage={() => {}}
           />
