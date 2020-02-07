@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import '../scss/main.scss';
+import '../../scss/main.scss';
+
+import ApiGetter from '../ApiGetter/ApiGetter';
 
 class App extends Component {
   render() {
@@ -7,6 +9,7 @@ class App extends Component {
       <div>
         <h1>Hello world!</h1>
         <button>123</button>
+        <ApiGetter />
       </div>
     );
   }
