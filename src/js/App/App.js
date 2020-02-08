@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../scss/main.scss';
 
-import ApiGetter from '../ApiGetter/ApiGetter';
+import ApiGetter from '../ApiGetter';
 
 class App extends Component {
   render() {
