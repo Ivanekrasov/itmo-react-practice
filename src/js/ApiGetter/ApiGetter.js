@@ -4,12 +4,9 @@ import '../../scss/main.scss';
 import getInfoFromAPI from '../api/api';
 
 class ApiGetter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      table: [],
-    };
-  }
+  state = {
+    table: [],
+  };
 
   getTestTable = () => {
     try {
