@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import '../../scss/main.scss';
 
 import getInfoFromAPI from '../api/api';
