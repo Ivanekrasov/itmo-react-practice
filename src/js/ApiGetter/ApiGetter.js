@@ -16,7 +16,6 @@ class ApiGetter extends Component {
           <tbody>
             <tr key="main">
               {Object.keys(this.state.table[0]).map((cell, cellInd) => (
-                // eslint-disable-next-line react/jsx-key
                 <td key={`cellInd${cellInd}`}>{cell}</td>
               ))}
             </tr>
@@ -24,7 +23,6 @@ class ApiGetter extends Component {
               return (
                 <tr key={index}>
                   {Object.keys(elem).map((cell, cellInd) => (
-                    // eslint-disable-next-line react/jsx-key
                     <td key={`cellInd${cellInd}`}>{elem[cell]}</td>
                   ))}
                 </tr>
