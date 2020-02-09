@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import TablePage from './TablePage';
+import Header from './Header'
 import '../../scss/main.scss';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <h1>Hello world!</h1>
-        <button>123</button>
-      </div>
-    );
+        <Fragment>
+          <Header/>
+          <TablePage className='container'/>
+        </Fragment>
+    )
   }
 }
 
