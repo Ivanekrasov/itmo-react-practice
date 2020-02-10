@@ -11,7 +11,6 @@ async function getInfoFromAPI(rover = TEST_ROVER, sol = TEST_SOL, camera = TEST_
     const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&camera=${camera}&page=${page}&api_key=${API_KEY}`;
     const response = await fetch(url);
     const responseJson = await response.json();
-    console.log(await responseJson);
     await responseJson.photos.forEach(elem => {
       const tempDay = {
         imgName: elem.img_src,
