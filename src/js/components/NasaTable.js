@@ -5,47 +5,49 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
+
 import ImageDialog from './ImageDialog';
-import { getNasaData } from '../api/table'
+import { getNasaData } from '../api/table';
 
 class NasaTable extends Component {
 
     constructor (props) {
-        super(props)
+        super(props);
         this.state = {
             data: {},
             visibleRows: null,
             page: 0,
             rowsPerPage: 10,
-            open: false,
+            isModalOpen: false,
             onLink: false
-        }
+        };
+        this.rowsValues = [5, 10, 25]
     }
 
-    handleClose = () => this.setState({ open: false })
+    handleClose = () => this.setState({ isModalOpen: false });
 
-    getDataToShow = (table, from, rowsRepPage) => table.filter((row, i) => i >= from && i < from + rowsRepPage)
+    getDataToShow = (table, from, rowsRepPage) => table.filter((row, i) => i >= from && i < from + rowsRepPage);
 
-    nextPage = async () => {
-        const { rowsPerPage, page, data } = this.state
-        const from = rowsPerPage * (page + 1)
-        const visibleRows = this.getDataToShow(data.table, from, rowsPerPage)
+    nextPage = () => {
+        const { rowsPerPage, page, data } = this.state;
+        const from = rowsPerPage * (page + 1);
+        const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
         this.setState({ visibleRows, page: page + 1 })
-    }
+    };
 
-    prevPage = async () => {
-        const { rowsPerPage, page, data } = this.state
-        const from = rowsPerPage * (page - 1)
-        const visibleRows = this.getDataToShow(data.table, from, rowsPerPage)
+    prevPage = () => {
+        const { rowsPerPage, page, data } = this.state;
+        const from = rowsPerPage * (page - 1);
+        const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
         this.setState({ visibleRows, page: page - 1 })
-    }
+    };
 
-    changeRow = async (e) => {
-        const { data } = this.state
-        const rows = +e.target.value
-        const visibleRows = this.getDataToShow(data.table, 0, rows)
+    changeRow = (e) => {
+        const { data } = this.state;
+        const rows = +e.target.value;
+        const visibleRows = this.getDataToShow(data.table, 0, rows);
         this.setState({ rowsPerPage: rows, visibleRows, page: 0 })
-    }
+    };
 
     fillCells = (cell, i) => {
         if (i !== 0) {
@@ -61,25 +63,25 @@ class NasaTable extends Component {
             >
                 { cell }
             </TableCell>)
-    }
+    };
 
-    openDialog = () => this.setState({ open: true })
+    openDialog = () => this.setState({ isModalOpen: true });
 
-    componentDidMount = async () => {
+     async componentDidMount () {
         const { rowsPerPage, page } = this.state;
         const res = await getNasaData();
         const data = await res.json();
-        const from = rowsPerPage * page
-        const visibleRows = this.getDataToShow(data.table, from, rowsPerPage)
+        const from = rowsPerPage * page;
+        const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
         this.setState({ data, visibleRows })
     }
 
     render() {
-        const { data, page, rowsPerPage, visibleRows, open } = this.state
-        const { headers, table = [] } = data
+        const { data, page, rowsPerPage, visibleRows, isModalOpen } = this.state;
+        const { headers, table = [] } = data;
         return(
-            <React.Fragment>
-                <ImageDialog open={ open } onClose={ this.handleClose }/>
+            <>
+                <ImageDialog open={ isModalOpen } onClose={ this.handleClose }/>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -93,7 +95,7 @@ class NasaTable extends Component {
                     </TableBody>
                 </Table>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={this.rowsValues }
                     component='div'
                     count={table && table.length}
                     rowsPerPage={rowsPerPage}
@@ -101,15 +103,15 @@ class NasaTable extends Component {
                     onChangeRowsPerPage={this.changeRow}
                     backIconButtonProps={{
                         'aria-label': 'Previous Page',
-                        'onClick': this.prevPage
+                        onClick: this.prevPage
                     }}
                     nextIconButtonProps={{
                         'aria-label': 'Next Page',
-                        'onClick': this.nextPage
+                        onClick: this.nextPage
                     }}
                     onChangePage={() => {}}
                 />
-            </React.Fragment>
+            </>
         )
     }
 }

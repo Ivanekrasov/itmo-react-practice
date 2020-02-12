@@ -1,5 +1,5 @@
 import React from 'react';
-import NasaTable from './NasaTable';
+import NasaTable from '../components/NasaTable';
 
 class TablePage extends React.Component {
     render() {
