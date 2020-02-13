@@ -1,12 +1,6 @@
 import React from 'react';
 import NasaTable from '../components/NasaTable';
 
-class TablePage extends React.Component {
-    render() {
-        return (
-            <NasaTable/>
-        )
-    }
-}
+const TablePage = () => <NasaTable />;
 
 export default TablePage;

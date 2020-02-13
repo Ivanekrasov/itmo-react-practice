@@ -8,11 +8,11 @@ import '../scss/main.scss';
 class App extends Component {
   render() {
     return (
-        <>
-          <Header/>
-          <TablePage className='container'/>
-        </>
-    )
+      <>
+        <Header />
+        <TablePage className="container" />
+      </>
+    );
   }
 }
 
