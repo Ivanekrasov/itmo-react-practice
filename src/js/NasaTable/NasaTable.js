@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import ImageDialog from './ImageDialog';
+import ImageDialog from '../ImageDialog';
 import { getNasaData } from '../api/table';
 
 class NasaTable extends Component {

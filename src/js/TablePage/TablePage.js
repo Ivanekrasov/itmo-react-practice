@@ -1,5 +1,5 @@
 import React from 'react';
-import NasaTable from '../components/NasaTable';
+import NasaTable from '../NasaTable';
 
 const TablePage = () => <NasaTable />;
 
