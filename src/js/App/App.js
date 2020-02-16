@@ -23,11 +23,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="main">
-        <button onClick={() => console.log(this.state)}></button>
+      <>
         <Header />
         <NasaTable className="container" />
-      </div>
+      </>
     );
   }
 }

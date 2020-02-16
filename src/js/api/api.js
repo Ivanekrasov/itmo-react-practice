@@ -1,4 +1,4 @@
-import headersMapping from './tableHeaders';
+import headersMapping from './tableHeadersMapping';
 
 const API_KEY = 'LR7eqPMCqaBKMlIEKf17ExpE4DlGwExDHLCXhGrZ';
 

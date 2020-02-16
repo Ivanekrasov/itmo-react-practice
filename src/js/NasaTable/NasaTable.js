@@ -8,8 +8,10 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import ImageDialog from '../ImageDialog';
 
-import headersMapping from '../api/tableHeaders';
+import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
+
+import './nasaTable.scss';
 
 const tableHeaders = Object.keys(headersMapping);
 
@@ -112,7 +114,6 @@ class NasaTable extends Component {
             'aria-label': 'Next Page',
             onClick: this.nextPage,
           }}
-          onChangePage={() => {}}
         />
       </>
     );

@@ -5,6 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import './header.scss';
+
 const Header = () => (
   <AppBar position="sticky" className="table-header">
     <Toolbar>
