@@ -10,11 +10,9 @@ const TEST_PAGE = 1;
 const headers = Object.keys(headersMapping).slice(0, -1);
 
 function getInfoFromPromise(response, table) {
-  const URL_SEPARATOR = '/';
-
   response.photos.map(photoObj =>
     table.push({
-      [Object.values(headersMapping)[0]]: photoObj.img_src.slice(photoObj.img_src.lastIndexOf(URL_SEPARATOR)),
+      [Object.values(headersMapping)[0]]: photoObj.id,
       [Object.values(headersMapping)[1]]: photoObj.sol,
       [Object.values(headersMapping)[2]]: photoObj.camera.name,
       [Object.values(headersMapping)[3]]: photoObj.camera.full_name,
@@ -43,6 +41,7 @@ async function getInfoFromAPI(rover = TEST_ROVER, sol = TEST_SOL, camera = TEST_
     });
 
     const responseStack = await Promise.all(promiseStack);
+    console.log(responseStack);
     responseStack.map(response => getInfoFromPromise(response, tableInfo));
 
     return {
