@@ -4,7 +4,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import { bool, func, string } from 'prop-types';
+import { bool, func, string, number } from 'prop-types';
 
 class ImageDialog extends Component {
   render() {
@@ -35,7 +35,7 @@ ImageDialog.propTypes = {
   open: bool,
   onClose: func,
   image: string,
-  imageName: string,
+  imageName: number,
 };
 
 export default ImageDialog;

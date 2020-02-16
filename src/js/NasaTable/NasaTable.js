@@ -10,6 +10,7 @@ import ImageDialog from '../ImageDialog';
 
 import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
+import sorts from '../sorts/sorts';
 
 import './nasaTable.scss';
 
@@ -56,6 +57,14 @@ class NasaTable extends Component {
     this.setState({ rowsPerPage: rows, visibleRows, page: 0 });
   };
 
+  sortRows = key => {
+    const oldData = this.state.data.table;
+    const oldHeaders = this.state.data.headers;
+    this.setState({ data: { headers: oldHeaders, table: sorts(oldData, key) } }, () =>
+      console.log(this.state.data.table),
+    );
+  };
+
   fillCell = (row, i) => {
     const cellData = row[headersMapping[tableHeaders[i]]];
     return i ? (
@@ -82,6 +91,7 @@ class NasaTable extends Component {
   render() {
     const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
     const { headers, table = [] } = data;
+
     return (
       <>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
@@ -90,7 +100,7 @@ class NasaTable extends Component {
             <TableRow>
               {headers &&
                 headers.map((el, i) => (
-                  <TableCell className="table-headers" key={i}>
+                  <TableCell className="table-headers" key={i} onClick={() => this.sortRows(headersMapping[el])}>
                     {el}
                   </TableCell>
                 ))}

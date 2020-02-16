@@ -41,7 +41,6 @@ async function getInfoFromAPI(rover = TEST_ROVER, sol = TEST_SOL, camera = TEST_
     });
 
     const responseStack = await Promise.all(promiseStack);
-    console.log(responseStack);
     responseStack.map(response => getInfoFromPromise(response, tableInfo));
 
     return {
