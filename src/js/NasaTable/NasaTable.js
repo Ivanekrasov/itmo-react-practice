@@ -7,9 +7,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import ImageDialog from '../ImageDialog';
-// import { getNasaData } from '../api/table';
 
-import getData from '../api/getData';
+import headersMapping from '../api/tableHeaders';
+import getData from '../api/api';
+
+const tableHeaders = Object.keys(headersMapping);
 
 class NasaTable extends Component {
   constructor(props) {
@@ -50,19 +52,13 @@ class NasaTable extends Component {
     this.setState({ rowsPerPage: rows, visibleRows, page: 0 });
   };
 
-  fillCells = (cell, i) => {
-    if (i !== 0) {
-      return <TableCell key={i}>{cell}</TableCell>;
-    }
-    return (
-      <TableCell
-        key={i}
-        onClick={this.openDialog}
-        onMouseEnter={() => this.setState({ onLink: true })}
-        onMouseLeave={() => this.setState({ onLink: false })}
-        className={`first-item ${this.state.onLink && 'on-link'}`}
-      >
-        {cell}
+  fillCell = (row, i) => {
+    const cellData = row[headersMapping[tableHeaders[i]]];
+    return i ? (
+      <TableCell key={i}>{cellData}</TableCell>
+    ) : (
+      <TableCell onClick={this.openDialog} className="first-item" key={i}>
+        {cellData}
       </TableCell>
     );
   };
@@ -97,7 +93,7 @@ class NasaTable extends Component {
           <TableBody>
             {visibleRows &&
               visibleRows.map((row, i) => (
-                <TableRow key={i}>{row.info.map((cell, j) => this.fillCells(cell, j))}</TableRow>
+                <TableRow key={i}>{headers.map((cell, j) => this.fillCell(row, j))}</TableRow>
               ))}
           </TableBody>
         </Table>
