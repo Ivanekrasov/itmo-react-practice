@@ -4,11 +4,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import { bool, func } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 
 class ImageDialog extends Component {
   render() {
-    const { open, onClose } = this.props;
+    const { open, onClose, image } = this.props;
     return (
       <Dialog
         open={open}
@@ -18,12 +18,7 @@ class ImageDialog extends Component {
       >
         <DialogTitle id="alert-dialog-title">Mars</DialogTitle>
         <DialogContent>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg"
-            alt="zaglushka"
-            width="255"
-            height="255"
-          />
+          <img src={image} alt="zaglushka" width="255" height="255" />
         </DialogContent>
 
         <DialogActions>
@@ -39,6 +34,7 @@ class ImageDialog extends Component {
 ImageDialog.propTypes = {
   open: bool,
   onClose: func,
+  image: string,
 };
 
 export default ImageDialog;

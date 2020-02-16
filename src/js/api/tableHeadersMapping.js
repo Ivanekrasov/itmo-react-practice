@@ -5,4 +5,5 @@ export default {
   'Full camera name': 'cameraFull',
   'Rover name': 'roverName',
   Status: 'roverStatus',
+  FullName: 'fullName',
 };
