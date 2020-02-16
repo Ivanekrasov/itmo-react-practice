@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../../scss/main.scss';
 
 import getInfoFromAPI from '../api/api';
+import sorts from '../sorts/sorts';
 
 class ApiGetter extends Component {
   state = {
@@ -41,6 +42,12 @@ class ApiGetter extends Component {
       <div className="api-getter">
         <button className="test-button" onClick={async () => this.setState(await getInfoFromAPI())}>
           Test
+        </button>
+        <button
+          className="test-button sort-button"
+          onClick={() => this.setState({ table: sorts(this.state.table, 'camera') })}
+        >
+          Sort by camera
         </button>
         {this.getTestTable()}
       </div>
