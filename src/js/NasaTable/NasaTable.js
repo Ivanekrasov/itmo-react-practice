@@ -6,10 +6,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import PropTypes from 'prop-types';
-
 import ImageDialog from '../ImageDialog';
-import { getNasaData } from '../api/table';
+// import { getNasaData } from '../api/table';
+
+import getData from '../api/getData';
 
 class NasaTable extends Component {
   constructor(props) {
@@ -71,8 +71,7 @@ class NasaTable extends Component {
 
   async componentDidMount() {
     const { rowsPerPage, page } = this.state;
-    const res = await getNasaData();
-    const data = await res.json();
+    const data = await getData();
     const from = rowsPerPage * page;
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
     this.setState({ data, visibleRows });
@@ -123,9 +122,5 @@ class NasaTable extends Component {
     );
   }
 }
-
-NasaTable.propTypes = {
-  contentTable: PropTypes.array,
-};
 
 export default NasaTable;

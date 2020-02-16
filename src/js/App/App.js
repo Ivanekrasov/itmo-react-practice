@@ -26,7 +26,7 @@ class App extends Component {
       <div className="main">
         <button onClick={() => console.log(this.state)}></button>
         <Header />
-        <NasaTable className="container" contentTable={this.state.table} />
+        <NasaTable className="container" />
       </div>
     );
   }
