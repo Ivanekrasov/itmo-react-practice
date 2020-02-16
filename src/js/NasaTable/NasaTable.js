@@ -26,6 +26,7 @@ class NasaTable extends Component {
       isModalOpen: false,
       onLink: false,
       clickedImage: '',
+      clickedImageName: '',
     };
     this.rowsValues = [5, 10, 25];
   }
@@ -60,14 +61,14 @@ class NasaTable extends Component {
     return i ? (
       <TableCell key={i}>{cellData}</TableCell>
     ) : (
-      <TableCell onClick={() => this.openDialog(row.fullName)} className="first-item" key={i}>
+      <TableCell onClick={() => this.openDialog(row.fullName, row.imgName)} className="first-item" key={i}>
         {cellData}
       </TableCell>
     );
   };
 
-  openDialog = img => {
-    this.setState({ isModalOpen: true, clickedImage: img });
+  openDialog = (img, name) => {
+    this.setState({ isModalOpen: true, clickedImage: img, clickedImageName: name });
   };
 
   async componentDidMount() {
@@ -79,11 +80,11 @@ class NasaTable extends Component {
   }
 
   render() {
-    const { data, page, rowsPerPage, visibleRows, isModalOpen } = this.state;
+    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
     const { headers, table = [] } = data;
     return (
       <>
-        <ImageDialog open={isModalOpen} onClose={this.handleClose} image={this.state.clickedImage} />
+        <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <Table>
           <TableHead>
             <TableRow>

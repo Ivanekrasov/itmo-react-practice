@@ -8,7 +8,7 @@ import { bool, func, string } from 'prop-types';
 
 class ImageDialog extends Component {
   render() {
-    const { open, onClose, image } = this.props;
+    const { open, onClose, image, imageName } = this.props;
     return (
       <Dialog
         open={open}
@@ -16,7 +16,7 @@ class ImageDialog extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Mars</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{imageName}</DialogTitle>
         <DialogContent>
           <img src={image} alt="zaglushka" width="255" height="255" />
         </DialogContent>
@@ -35,6 +35,7 @@ ImageDialog.propTypes = {
   open: bool,
   onClose: func,
   image: string,
+  imageName: string,
 };
 
 export default ImageDialog;
