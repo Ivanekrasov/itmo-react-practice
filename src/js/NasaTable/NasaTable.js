@@ -6,6 +6,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
+import PropTypes from 'prop-types';
+
 import ImageDialog from '../ImageDialog';
 import { getNasaData } from '../api/table';
 
@@ -121,5 +123,9 @@ class NasaTable extends Component {
     );
   }
 }
+
+NasaTable.propTypes = {
+  contentTable: PropTypes.array,
+};
 
 export default NasaTable;
