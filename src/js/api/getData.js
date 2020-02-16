@@ -1,19 +1,25 @@
 import getInfoFromAPI from './api';
 
-const SLICE_NAME = -40;
+// const TEST_ROVERS = ['curiosity', 'opportunity', 'spirit'];
+// const TEST_SOL = 1000;
+// const TEST_CAMERA = 'fhaz';
+// const TEST_PAGE = 1;
 
 async function getData() {
   const data = await getInfoFromAPI();
+
+  console.log(data);
+
   const outputData = {
     headers: ['Name', 'SOL', 'Camera', 'Rover name', 'Status'],
     table: [],
   };
-  data.table.map(elem => {
+  data.map(elem => {
     const tempCell = {
       info: [],
       url: elem.imgName,
     };
-    tempCell.info.push(elem.imgName.slice(SLICE_NAME));
+    tempCell.info.push(elem.imgName.slice(elem.imgName.lastIndexOf('/')));
     tempCell.info.push(elem.sol);
     tempCell.info.push(elem.cameraShort);
     tempCell.info.push(elem.roverName);

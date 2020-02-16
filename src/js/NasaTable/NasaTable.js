@@ -11,6 +11,9 @@ import ImageDialog from '../ImageDialog';
 
 import getData from '../api/getData';
 
+// test const
+// const ALL_ROVERS = ['curiosity', 'opportunity'];
+
 class NasaTable extends Component {
   constructor(props) {
     super(props);
