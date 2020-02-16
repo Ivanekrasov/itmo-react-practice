@@ -20,7 +20,7 @@ async function getInfoFromAPI(rover = TEST_ROVER, sol = TEST_SOL, camera = TEST_
     return {
       headers,
       table: responseJson.photos.map(photoObj => ({
-        [Object.values(headersMapping)[0]]: photoObj.img_src.split(URL_SEPARATOR).slice(-1)[0],
+        [Object.values(headersMapping)[0]]: photoObj.img_src.slice(photoObj.img_src.lastIndexOf(URL_SEPARATOR)),
         [Object.values(headersMapping)[1]]: photoObj.sol,
         [Object.values(headersMapping)[2]]: photoObj.camera.name,
         [Object.values(headersMapping)[3]]: photoObj.camera.full_name,
