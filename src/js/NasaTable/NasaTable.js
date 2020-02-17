@@ -62,13 +62,16 @@ class NasaTable extends Component {
     this.setState({ rowsPerPage: rows, visibleRows, page: 0 });
   };
 
+  setDataToShow = ({ rowsPerPage, page, data, sortKey, isDescendingSort }) => {
+    const from = rowsPerPage * page;
+    const visibleRows = this.getDataToShow(data.table, from, rowsPerPage, sortKey, isDescendingSort);
+    this.setState({ data, visibleRows });
+  };
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.isDescendingSort !== this.state.isDescendingSort) {
       const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
-      const dataCopy = { ...data };
-      const from = rowsPerPage * page;
-      const visibleRows = this.getDataToShow(dataCopy.table, from, rowsPerPage, sortKey, isDescendingSort);
-      this.setState({ dataCopy, visibleRows });
+      this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
     }
   }
 
@@ -90,9 +93,7 @@ class NasaTable extends Component {
   async componentDidMount() {
     const { rowsPerPage, page } = this.state;
     const data = await getData();
-    const from = rowsPerPage * page;
-    const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
-    this.setState({ data, visibleRows });
+    this.setDataToShow({ rowsPerPage, page, data });
   }
 
   render() {
