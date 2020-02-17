@@ -61,16 +61,18 @@ class NasaTable extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.sortHigh === this.state.sortHigh) return true;
-
+    const oldTable = [...this.state.data.table];
+    const oldHeaders = [...this.state.data.headers];
     this.setState(
       {
         data: {
-          headers: this.state.data.headers,
-          table: sorts(this.state.data.table, this.state.sortKey, this.state.sortHigh),
+          headers: oldHeaders,
+          table: sorts(oldTable, this.state.sortKey, this.state.sortHigh),
         },
       },
       () => console.log(this.state.data.table),
     );
+    // this.forceUpdate();
     return true;
   }
 
