@@ -38,11 +38,7 @@ class NasaTable extends Component {
 
   getDataToShow = (table, from, rowsRepPage, sortKey, isDescendingSort) => {
     if (sortKey) {
-      return sorts(
-        table.filter((row, i) => i >= from && i < from + rowsRepPage),
-        sortKey,
-        isDescendingSort,
-      );
+      return sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsRepPage);
     }
     return table.filter((row, i) => i >= from && i < from + rowsRepPage);
   };
