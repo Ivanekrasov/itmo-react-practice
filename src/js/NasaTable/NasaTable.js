@@ -28,7 +28,7 @@ class NasaTable extends Component {
       onLink: false,
       clickedImage: '',
       clickedImageName: '',
-      sortHigh: true,
+      isDescendingSort: true,
       sortKey: '',
     };
     this.rowsValues = [5, 10, 25];
@@ -36,7 +36,16 @@ class NasaTable extends Component {
 
   handleClose = () => this.setState({ isModalOpen: false });
 
-  getDataToShow = (table, from, rowsRepPage) => table.filter((row, i) => i >= from && i < from + rowsRepPage);
+  getDataToShow = (table, from, rowsRepPage, sortKey, isDescendingSort) => {
+    if (sortKey) {
+      return sorts(
+        table.filter((row, i) => i >= from && i < from + rowsRepPage),
+        sortKey,
+        isDescendingSort,
+      );
+    }
+    return table.filter((row, i) => i >= from && i < from + rowsRepPage);
+  };
 
   nextPage = () => {
     const { rowsPerPage, page, data } = this.state;
@@ -60,26 +69,12 @@ class NasaTable extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.sortHigh === this.state.sortHigh) return true;
-    const { rowsPerPage, page, data, sortKey, sortHigh } = this.state;
+    if (prevState.isDescendingSort === this.state.isDescendingSort) return true;
+    const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
     const dataCopy = { ...data };
-    sorts(dataCopy.table, sortKey, sortHigh);
     const from = rowsPerPage * page;
-    const visibleRows = this.getDataToShow(dataCopy.table, from, rowsPerPage);
+    const visibleRows = this.getDataToShow(dataCopy.table, from, rowsPerPage, sortKey, isDescendingSort);
     this.setState({ dataCopy, visibleRows });
-
-    // const oldTable = [...this.state.data.table];
-    // const oldHeaders = [...this.state.data.headers];
-    // this.setState(
-    //   {
-    //     data: {
-    //       headers: oldHeaders,
-    //       table: sorts(oldTable, this.state.sortKey, this.state.sortHigh),
-    //     },
-    //   },
-    //   () => console.log(this.state.data.table),
-    // );
-    // // this.forceUpdate();
     return true;
   }
 
@@ -107,7 +102,16 @@ class NasaTable extends Component {
   }
 
   render() {
-    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName, sortHigh } = this.state;
+    const {
+      data,
+      page,
+      rowsPerPage,
+      visibleRows,
+      isModalOpen,
+      clickedImage,
+      clickedImageName,
+      isDescendingSort,
+    } = this.state;
     const { headers, table = [] } = data;
 
     return (
@@ -122,9 +126,9 @@ class NasaTable extends Component {
                     className="table-headers"
                     key={i}
                     onClick={() =>
-                      sortHigh
-                        ? this.setState({ sortHigh: false, sortKey: headersMapping[el] })
-                        : this.setState({ sortHigh: true, sortKey: headersMapping[el] })
+                      isDescendingSort
+                        ? this.setState({ isDescendingSort: false, sortKey: headersMapping[el] })
+                        : this.setState({ isDescendingSort: true, sortKey: headersMapping[el] })
                     }
                   >
                     {el}
