@@ -28,6 +28,8 @@ class NasaTable extends Component {
       onLink: false,
       clickedImage: '',
       clickedImageName: '',
+      sortHigh: true,
+      sortKey: '',
     };
     this.rowsValues = [5, 10, 25];
   }
@@ -57,13 +59,20 @@ class NasaTable extends Component {
     this.setState({ rowsPerPage: rows, visibleRows, page: 0 });
   };
 
-  sortRows = key => {
-    const oldData = this.state.data.table;
-    const oldHeaders = this.state.data.headers;
-    this.setState({ data: { headers: oldHeaders, table: sorts(oldData, key) } }, () =>
-      console.log(this.state.data.table),
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.sortHigh === this.state.sortHigh) return true;
+
+    this.setState(
+      {
+        data: {
+          headers: this.state.data.headers,
+          table: sorts(this.state.data.table, this.state.sortKey, this.state.sortHigh),
+        },
+      },
+      () => console.log(this.state.data.table),
     );
-  };
+    return true;
+  }
 
   fillCell = (row, i) => {
     const cellData = row[headersMapping[tableHeaders[i]]];
@@ -89,7 +98,7 @@ class NasaTable extends Component {
   }
 
   render() {
-    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName, sortHigh } = this.state;
     const { headers, table = [] } = data;
 
     return (
@@ -100,7 +109,15 @@ class NasaTable extends Component {
             <TableRow>
               {headers &&
                 headers.map((el, i) => (
-                  <TableCell className="table-headers" key={i} onClick={() => this.sortRows(headersMapping[el])}>
+                  <TableCell
+                    className="table-headers"
+                    key={i}
+                    onClick={() =>
+                      sortHigh
+                        ? this.setState({ sortHigh: false, sortKey: headersMapping[el] })
+                        : this.setState({ sortHigh: true, sortKey: headersMapping[el] })
+                    }
+                  >
                     {el}
                   </TableCell>
                 ))}
@@ -128,6 +145,7 @@ class NasaTable extends Component {
             'aria-label': 'Next Page',
             onClick: this.nextPage,
           }}
+          onChangePage={() => {}}
         />
       </>
     );

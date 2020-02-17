@@ -7,7 +7,7 @@ const TEST_SOL = [2000];
 const TEST_CAMERA = ['fhaz', 'rhaz'];
 const TEST_PAGE = 1;
 
-const headers = Object.keys(headersMapping).slice(0, -1);
+const headers = Object.keys(headersMapping);
 
 function getInfoFromPromise(response, table) {
   response.photos.map(photoObj =>
@@ -18,7 +18,7 @@ function getInfoFromPromise(response, table) {
       [Object.values(headersMapping)[3]]: photoObj.camera.full_name,
       [Object.values(headersMapping)[4]]: photoObj.rover.name,
       [Object.values(headersMapping)[5]]: photoObj.rover.status,
-      [Object.values(headersMapping)[6]]: photoObj.img_src,
+      fullName: photoObj.img_src,
     }),
   );
 }
