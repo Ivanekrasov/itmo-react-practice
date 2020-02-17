@@ -25,7 +25,6 @@ class NasaTable extends Component {
       page: 0,
       rowsPerPage: 10,
       isModalOpen: false,
-      onLink: false,
       clickedImage: '',
       clickedImageName: '',
       isDescendingSort: true,
@@ -37,10 +36,9 @@ class NasaTable extends Component {
   handleClose = () => this.setState({ isModalOpen: false });
 
   getDataToShow = (table, from, rowsRepPage, sortKey, isDescendingSort) => {
-    if (sortKey) {
-      return sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsRepPage);
-    }
-    return table.filter((row, i) => i >= from && i < from + rowsRepPage);
+    return sortKey
+      ? sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsRepPage)
+      : table.filter((row, i) => i >= from && i < from + rowsRepPage);
   };
 
   nextPage = () => {
@@ -65,13 +63,13 @@ class NasaTable extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.isDescendingSort === this.state.isDescendingSort) return true;
-    const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
-    const dataCopy = { ...data };
-    const from = rowsPerPage * page;
-    const visibleRows = this.getDataToShow(dataCopy.table, from, rowsPerPage, sortKey, isDescendingSort);
-    this.setState({ dataCopy, visibleRows });
-    return true;
+    if (prevState.isDescendingSort !== this.state.isDescendingSort) {
+      const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
+      const dataCopy = { ...data };
+      const from = rowsPerPage * page;
+      const visibleRows = this.getDataToShow(dataCopy.table, from, rowsPerPage, sortKey, isDescendingSort);
+      this.setState({ dataCopy, visibleRows });
+    }
   }
 
   fillCell = (row, i) => {
