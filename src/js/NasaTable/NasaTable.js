@@ -61,18 +61,25 @@ class NasaTable extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.sortHigh === this.state.sortHigh) return true;
-    const oldTable = [...this.state.data.table];
-    const oldHeaders = [...this.state.data.headers];
-    this.setState(
-      {
-        data: {
-          headers: oldHeaders,
-          table: sorts(oldTable, this.state.sortKey, this.state.sortHigh),
-        },
-      },
-      () => console.log(this.state.data.table),
-    );
-    // this.forceUpdate();
+    const { rowsPerPage, page, data, sortKey, sortHigh } = this.state;
+    const dataCopy = { ...data };
+    sorts(dataCopy.table, sortKey, sortHigh);
+    const from = rowsPerPage * page;
+    const visibleRows = this.getDataToShow(dataCopy.table, from, rowsPerPage);
+    this.setState({ dataCopy, visibleRows });
+
+    // const oldTable = [...this.state.data.table];
+    // const oldHeaders = [...this.state.data.headers];
+    // this.setState(
+    //   {
+    //     data: {
+    //       headers: oldHeaders,
+    //       table: sorts(oldTable, this.state.sortKey, this.state.sortHigh),
+    //     },
+    //   },
+    //   () => console.log(this.state.data.table),
+    // );
+    // // this.forceUpdate();
     return true;
   }
 
