@@ -8,7 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import './header.scss';
 
 const Header = () => (
-  <AppBar position="sticky" className="table-header">
+  <AppBar className="table-header">
     <Toolbar>
       <IconButton edge="start" color="inherit" aria-label="menu">
         <MenuIcon />

@@ -7,7 +7,6 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import ImageDialog from '../ImageDialog';
-
 import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
 import sorts from '../sorts/sorts';
@@ -75,6 +74,9 @@ class NasaTable extends Component {
     }
   }
 
+  sortData = (isDescendingSort, header) =>
+    this.setState({ isDescendingSort: !isDescendingSort, sortKey: headersMapping[header] });
+
   fillCell = (row, i) => {
     const cellData = row[headersMapping[tableHeaders[i]]];
     return i ? (
@@ -116,17 +118,9 @@ class NasaTable extends Component {
           <TableHead>
             <TableRow>
               {headers &&
-                headers.map((el, i) => (
-                  <TableCell
-                    className="table-headers"
-                    key={i}
-                    onClick={() =>
-                      isDescendingSort
-                        ? this.setState({ isDescendingSort: false, sortKey: headersMapping[el] })
-                        : this.setState({ isDescendingSort: true, sortKey: headersMapping[el] })
-                    }
-                  >
-                    {el}
+                headers.map((header, i) => (
+                  <TableCell className="table-headers" key={i} onClick={() => this.sortData(isDescendingSort, header)}>
+                    {header}
                   </TableCell>
                 ))}
             </TableRow>
