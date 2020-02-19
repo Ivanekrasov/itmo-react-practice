@@ -1,0 +1,13 @@
+.photo-card {
+  &.card {
+    margin: 0;
+  }
+
+  &__camera {
+    font-weight: 700;
+  }
+
+  &__tooltip {
+    font-size: 15px;
+  }
+}

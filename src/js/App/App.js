@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
+import './App.scss';
 import NasaTable from '../NasaTable';
 import Header from '../Header';
 
 import sorts from '../sorts/sorts';
 import getInfoFromAPI from '../api/api';
-
-import './App.scss';
 
 class App extends Component {
   state = {

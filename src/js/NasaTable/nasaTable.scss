@@ -1,3 +1,5 @@
+@import '../../scss/utils/variables.scss';
+
 .table-headers.table-headers {
   background-color: #26a69a;
   color: white;
@@ -10,4 +12,21 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.container {
+  display: grid;
+  margin: 15px 20px;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 290px);
+  grid-gap: 30px;
+
+  @media (min-width: $tablet-width) {
+    margin: 30px 40px;
+  }
+
+  @media (min-width: $desktop-width) {
+    margin: 50px 70px;
+  }
+
 }
