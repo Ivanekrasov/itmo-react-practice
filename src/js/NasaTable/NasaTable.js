@@ -6,8 +6,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import ImageDialog from './ImageDialog';
-import { getNasaData } from '../api/table';
+import ImageDialog from '../ImageDialog';
+import headersMapping from '../api/tableHeadersMapping';
+import getData from '../api/api';
+import sorts from '../sorts/sorts';
+
+import './nasaTable.scss';
+
+const tableHeaders = Object.keys(headersMapping);
 
 class NasaTable extends Component {
   constructor(props) {
@@ -18,14 +24,21 @@ class NasaTable extends Component {
       page: 0,
       rowsPerPage: 10,
       isModalOpen: false,
-      onLink: false,
+      clickedImage: '',
+      clickedImageName: '',
+      isDescendingSort: true,
+      sortKey: '',
     };
     this.rowsValues = [5, 10, 25];
   }
 
   handleClose = () => this.setState({ isModalOpen: false });
 
-  getDataToShow = (table, from, rowsRepPage) => table.filter((row, i) => i >= from && i < from + rowsRepPage);
+  getDataToShow = (table, from, rowsRepPage, sortKey, isDescendingSort) => {
+    return sortKey
+      ? sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsRepPage)
+      : table.filter((row, i) => i >= from && i < from + rowsRepPage);
+  };
 
   nextPage = () => {
     const { rowsPerPage, page, data } = this.state;
@@ -48,47 +61,66 @@ class NasaTable extends Component {
     this.setState({ rowsPerPage: rows, visibleRows, page: 0 });
   };
 
-  fillCells = (cell, i) => {
-    if (i !== 0) {
-      return <TableCell key={i}>{cell}</TableCell>;
+  setDataToShow = ({ rowsPerPage, page, data, sortKey, isDescendingSort }) => {
+    const from = rowsPerPage * page;
+    const visibleRows = this.getDataToShow(data.table, from, rowsPerPage, sortKey, isDescendingSort);
+    this.setState({ data, visibleRows });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isDescendingSort !== this.state.isDescendingSort) {
+      const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
+      this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
     }
-    return (
-      <TableCell
-        key={i}
-        onClick={this.openDialog}
-        onMouseEnter={() => this.setState({ onLink: true })}
-        onMouseLeave={() => this.setState({ onLink: false })}
-        className={`first-item ${this.state.onLink && 'on-link'}`}
-      >
-        {cell}
+  }
+
+  sortData = (isDescendingSort, header) =>
+    this.setState({ isDescendingSort: !isDescendingSort, sortKey: headersMapping[header] });
+
+  fillCell = (row, i) => {
+    const cellData = row[headersMapping[tableHeaders[i]]];
+    return i ? (
+      <TableCell key={i}>{cellData}</TableCell>
+    ) : (
+      <TableCell onClick={() => this.openDialog(row.fullName, row.imgName)} className="first-item" key={i}>
+        {cellData}
       </TableCell>
     );
   };
 
-  openDialog = () => this.setState({ isModalOpen: true });
+  openDialog = (img, name) => {
+    this.setState({ isModalOpen: true, clickedImage: img, clickedImageName: name });
+  };
 
   async componentDidMount() {
     const { rowsPerPage, page } = this.state;
-    const res = await getNasaData();
-    const data = await res.json();
-    const from = rowsPerPage * page;
-    const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
-    this.setState({ data, visibleRows });
+    const data = await getData();
+    this.setDataToShow({ rowsPerPage, page, data });
   }
 
   render() {
-    const { data, page, rowsPerPage, visibleRows, isModalOpen } = this.state;
+    const {
+      data,
+      page,
+      rowsPerPage,
+      visibleRows,
+      isModalOpen,
+      clickedImage,
+      clickedImageName,
+      isDescendingSort,
+    } = this.state;
     const { headers, table = [] } = data;
+
     return (
       <>
-        <ImageDialog open={isModalOpen} onClose={this.handleClose} />
+        <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <Table>
           <TableHead>
             <TableRow>
               {headers &&
-                headers.map((el, i) => (
-                  <TableCell className="table-headers" key={i}>
-                    {el}
+                headers.map((header, i) => (
+                  <TableCell className="table-headers" key={i} onClick={() => this.sortData(isDescendingSort, header)}>
+                    {header}
                   </TableCell>
                 ))}
             </TableRow>
@@ -96,7 +128,7 @@ class NasaTable extends Component {
           <TableBody>
             {visibleRows &&
               visibleRows.map((row, i) => (
-                <TableRow key={i}>{row.info.map((cell, j) => this.fillCells(cell, j))}</TableRow>
+                <TableRow key={i}>{headers.map((cell, j) => this.fillCell(row, j))}</TableRow>
               ))}
           </TableBody>
         </Table>

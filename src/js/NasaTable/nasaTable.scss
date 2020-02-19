@@ -6,9 +6,8 @@
 .first-item.first-item {
   color: #00695c;
   font-weight: 700;
-}
 
-.first-item.on-link {
-  cursor: pointer;
+  &:hover {
+    cursor: pointer;
+  }
 }
-
