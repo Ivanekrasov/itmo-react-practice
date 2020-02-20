@@ -1,4 +1,4 @@
-@import '../../scss/utils/variables.scss';
+@import '../../scss/main.scss';
 
 .table-headers.table-headers {
   background-color: #26a69a;
@@ -34,8 +34,4 @@
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
-}
-
-.form {
-  min-width: 500px;
 }

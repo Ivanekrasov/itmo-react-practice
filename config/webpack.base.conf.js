@@ -82,6 +82,7 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
+              data: '@import "./src/scss/utils/variables";',
             },
           },
         ],
