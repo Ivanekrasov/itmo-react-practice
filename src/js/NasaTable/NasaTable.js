@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 
 import TablePagination from '@material-ui/core/TablePagination';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import { styled } from '@material-ui/core/styles';
 
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
@@ -12,6 +17,10 @@ import sorts from '../sorts/sorts';
 import './nasaTable.scss';
 
 const tableHeaders = Object.keys(headersMapping);
+
+const NasaForm = styled(FormControl)({
+  minWidth: 80,
+});
 
 class NasaTable extends Component {
   constructor(props) {
@@ -106,23 +115,36 @@ class NasaTable extends Component {
         <div className="container">
           {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
         </div>
-        <TablePagination
-          rowsPerPageOptions={this.rowsValues}
-          component="div"
-          count={table && table.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangeRowsPerPage={this.changeRow}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-            onClick: this.prevPage,
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-            onClick: this.nextPage,
-          }}
-          onChangePage={() => {}}
-        />
+        <div className="bottom-info">
+          <NasaForm className="form">
+            <InputLabel id="nasa-simple-select-label" className="nasa-simple-select-label">
+              Sort by:
+            </InputLabel>
+            <Select labelId="nasa-simple-select-label" id="nasa-simple-select" autoWidth={true}>
+              <MenuItem value={10}>Rover</MenuItem>
+              <MenuItem value={20}>Camera</MenuItem>
+              <MenuItem value={30}>Sol</MenuItem>
+            </Select>
+          </NasaForm>
+
+          <TablePagination
+            rowsPerPageOptions={this.rowsValues}
+            component="div"
+            count={table && table.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangeRowsPerPage={this.changeRow}
+            backIconButtonProps={{
+              'aria-label': 'Previous Page',
+              onClick: this.prevPage,
+            }}
+            nextIconButtonProps={{
+              'aria-label': 'Next Page',
+              onClick: this.nextPage,
+            }}
+            onChangePage={() => {}}
+          />
+        </div>
       </>
     );
   }
