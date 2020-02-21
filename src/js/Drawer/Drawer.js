@@ -22,6 +22,9 @@ import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
+import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
+
 import getDrawerInfo from '../api/getDrawerInfo';
 
 const NasaList = styled(List)({
@@ -43,18 +46,21 @@ class DrawerSide extends Component {
     drawerIsOpen: false,
     info: [],
     optionFlags: {},
+    solsRange: {},
   };
 
   async componentDidMount() {
     const apiInfo = await getDrawerInfo();
     const flags = Object.fromEntries(apiInfo.map(key => [key.rover, false]));
-
-    this.setState({ info: apiInfo, optionFlags: flags });
+    const sols = Object.fromEntries(apiInfo.map(key => [key.rover, [0, key.maxSol]]));
+    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols });
   }
 
   handleChange = rover => {
     this.setState({ optionFlags: { ...this.state.optionFlags, [rover]: !this.state.optionFlags[rover] } });
   };
+
+  handleSolChange = () => {};
 
   sideList = () => (
     <div role="presentation" onKeyDown={this.toggleDrawer(false)}>
@@ -86,7 +92,18 @@ class DrawerSide extends Component {
                           label={camera.name}
                         />
                       ))}
-                      <FormHelperText>Choose cameras</FormHelperText>
+                      <Typography id="range-slider" gutterBottom>
+                        Sols range
+                      </Typography>
+                      <Slider
+                        min={0}
+                        max={elem.maxSol}
+                        value={this.state.solsRange[elem.rover]}
+                        valueLabelDisplay="auto"
+                        aria-labelledby="range-slider"
+                        onChange={event => this.handleSolChange(event, elem.rover)}
+                      />
+                      <FormHelperText>Choose cameras and sols</FormHelperText>
                     </NasaCameras>
                   </NasaExpansion>
                 </div>
