@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -86,11 +87,16 @@ class DrawerSide extends Component {
                     </MuiExpansionPanelSummary>
                     <NasaCameras>
                       {elem.cameras.map(camera => (
-                        <FormControlLabel
+                        <Tooltip
                           key={camera.name}
-                          control={<Checkbox value={camera.name} />}
-                          label={camera.name}
-                        />
+                          title={<span className="photo-card__tooltip">{`Full name: ${camera.full_name}`}</span>}
+                          placement="right-start"
+                        >
+                          <FormControlLabel
+                            control={<Checkbox value={(console.log(camera), camera.name)} />}
+                            label={camera.name}
+                          />
+                        </Tooltip>
                       ))}
                       <Typography id="range-slider" gutterBottom>
                         Sols range
