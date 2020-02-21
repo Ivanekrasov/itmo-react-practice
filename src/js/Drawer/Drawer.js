@@ -59,12 +59,6 @@ class DrawerSide extends Component {
   sideList = () => (
     <div role="presentation" onKeyDown={this.toggleDrawer(false)}>
       <NasaList>
-        <ListItem button onClick={this.toggleDrawer(false)}>
-          <ListItemIcon>
-            <SearchIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Search'} />
-        </ListItem>
         <ListItem>
           <FormControl component="fieldset">
             <FormLabel component="legend">Rovers:</FormLabel>
@@ -100,6 +94,12 @@ class DrawerSide extends Component {
             </FormGroup>
             <FormHelperText>Choose mission of interest</FormHelperText>
           </FormControl>
+        </ListItem>
+        <ListItem button onClick={this.toggleDrawer(false)}>
+          <ListItemIcon>
+            <SearchIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Search'} />
         </ListItem>
       </NasaList>
       <Divider />
