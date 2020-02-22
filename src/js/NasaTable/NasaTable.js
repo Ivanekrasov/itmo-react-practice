@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 
 import TablePagination from '@material-ui/core/TablePagination';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { styled } from '@material-ui/core/styles';
 
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
@@ -14,13 +9,11 @@ import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
 import sorts from '../sorts/sorts';
 
+import SortSelect from '../SortSelect';
+
 import './nasaTable.scss';
 
 const tableHeaders = Object.keys(headersMapping);
-
-const NasaForm = styled(FormControl)({
-  minWidth: 80,
-});
 
 class NasaTable extends Component {
   constructor(props) {
@@ -105,10 +98,6 @@ class NasaTable extends Component {
     this.setDataToShow({ rowsPerPage, page, data });
   }
 
-  handleChange = event => {
-    this.sortData(this.state.isDescendingSort, event.target.value);
-  };
-
   render() {
     const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
     const { table = [] } = data;
@@ -120,25 +109,7 @@ class NasaTable extends Component {
           {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
         </div>
         <div className="bottom-info">
-          <NasaForm className="form">
-            <InputLabel id="nasa-simple-select-label">Sort by:</InputLabel>
-            <Select
-              labelId="nasa-simple-select-label"
-              id="nasa-simple-select"
-              autoWidth={true}
-              onChange={this.handleChange}
-            >
-              {Object.keys(headersMapping).map(element => {
-                if (element === 'Full camera name') return true;
-                return (
-                  <MenuItem key={element} value={element}>
-                    {element}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </NasaForm>
-
+          <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
           <TablePagination
             rowsPerPageOptions={this.rowsValues}
             component="div"

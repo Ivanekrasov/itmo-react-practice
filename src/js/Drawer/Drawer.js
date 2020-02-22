@@ -8,38 +8,20 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
-import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
+import RoversList from '../RoversList';
 
 import getDrawerInfo from '../api/getDrawerInfo';
 
 const NasaList = styled(List)({
   width: 250,
-});
-
-const NasaExpansion = styled(MuiExpansionPanel)({
-  boxShadow: 'none',
-});
-
-const NasaCameras = styled(MuiExpansionPanelDetails)({
-  display: 'flex',
-  flexDirection: 'column',
-  border: '1px solid grey',
 });
 
 class DrawerSide extends Component {
@@ -71,48 +53,14 @@ class DrawerSide extends Component {
             <FormLabel component="legend">Rovers:</FormLabel>
             <FormGroup>
               {this.state.info.map(elem => (
-                <div key={elem.rover} className="rover-info">
-                  <NasaExpansion square expanded={this.state.optionFlags[elem.rover]}>
-                    <MuiExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            value={elem.rover}
-                            checked={this.state.optionFlags[elem.rover]}
-                            onChange={() => this.handleChange(elem.rover)}
-                          />
-                        }
-                        label={elem.rover}
-                      />
-                    </MuiExpansionPanelSummary>
-                    <NasaCameras>
-                      {elem.cameras.map(camera => (
-                        <Tooltip
-                          key={camera.name}
-                          title={<span className="photo-card__tooltip">{`Full name: ${camera.full_name}`}</span>}
-                          placement="right-start"
-                        >
-                          <FormControlLabel
-                            control={<Checkbox value={(console.log(camera), camera.name)} />}
-                            label={camera.name}
-                          />
-                        </Tooltip>
-                      ))}
-                      <Typography id="range-slider" gutterBottom>
-                        Sols range
-                      </Typography>
-                      <Slider
-                        min={0}
-                        max={elem.maxSol}
-                        value={this.state.solsRange[elem.rover]}
-                        valueLabelDisplay="auto"
-                        aria-labelledby="range-slider"
-                        onChange={event => this.handleSolChange(event, elem.rover)}
-                      />
-                      <FormHelperText>Choose cameras and sols</FormHelperText>
-                    </NasaCameras>
-                  </NasaExpansion>
-                </div>
+                <RoversList
+                  key={elem.rover}
+                  elem={elem}
+                  handleChange={this.handleChange}
+                  handleSolChange={this.handleSolChange}
+                  optionFlags={this.state.optionFlags}
+                  solsRange={this.state.solsRange}
+                />
               ))}
             </FormGroup>
             <FormHelperText>Choose mission of interest</FormHelperText>
