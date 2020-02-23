@@ -19,6 +19,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import RoversList from '../RoversList';
 
 import getDrawerInfo from '../api/getDrawerInfo';
+// import getData from '../api/api';
 
 const NasaList = styled(List)({
   width: 250,
@@ -30,13 +31,24 @@ class DrawerSide extends Component {
     info: [],
     optionFlags: {},
     solsRange: {},
+    cameras: {},
   };
 
   async componentDidMount() {
     const apiInfo = await getDrawerInfo();
     const flags = Object.fromEntries(apiInfo.map(key => [key.rover, false]));
     const sols = Object.fromEntries(apiInfo.map(key => [key.rover, [0, key.maxSol]]));
-    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols });
+    const cameras = Object.fromEntries(
+      apiInfo.map(key => [
+        key.rover,
+        Object.fromEntries(
+          key.cameras.map(cam => {
+            return [cam.name, false];
+          }),
+        ),
+      ]),
+    );
+    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols, cameras });
   }
 
   handleChange = rover => {
@@ -45,6 +57,15 @@ class DrawerSide extends Component {
 
   handleSolChange = rover => (event, value) => {
     this.setState({ solsRange: { ...this.state.solsRange, [rover]: value } });
+  };
+
+  handleCameraChange = (rover, camera) => {
+    this.setState({
+      cameras: {
+        ...this.state.cameras,
+        [rover]: { ...this.state.cameras[rover], [camera]: !this.state.cameras[rover][camera] },
+      },
+    });
   };
 
   sideList = () => (
@@ -60,8 +81,10 @@ class DrawerSide extends Component {
                   elem={elem}
                   handleChange={this.handleChange}
                   handleSolChange={this.handleSolChange}
+                  handleCameraChange={this.handleCameraChange}
                   optionFlags={this.state.optionFlags}
                   solsRange={this.state.solsRange}
+                  cameras={this.state.cameras}
                 />
               ))}
             </FormGroup>
