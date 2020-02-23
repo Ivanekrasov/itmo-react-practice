@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 
 import TablePagination from '@material-ui/core/TablePagination';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
@@ -10,6 +11,7 @@ import getData from '../api/api';
 import sorts from '../sorts/sorts';
 
 import SortSelect from '../SortSelect';
+import Alert from '../Alert';
 
 import './nasaTable.scss';
 
@@ -28,6 +30,7 @@ class NasaTable extends Component {
       clickedImageName: '',
       isDescendingSort: true,
       sortKey: 'imgName',
+      notification: false,
     };
     this.rowsValues = [5, 10, 25];
   }
@@ -94,19 +97,53 @@ class NasaTable extends Component {
 
   async componentDidMount() {
     const { rowsPerPage, page } = this.state;
-    const data = await getData();
+    let notification = false;
+    let data;
+    try {
+      data = await getData();
+    } catch {
+      notification = true;
+    }
     this.setDataToShow({ rowsPerPage, page, data });
+    this.setState({ notification });
   }
 
+  handleCloseNotification = () => {
+    this.setState({ notification: false });
+  };
+
   render() {
-    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+    const {
+      data,
+      page,
+      rowsPerPage,
+      visibleRows,
+      isModalOpen,
+      clickedImage,
+      clickedImageName,
+      notification,
+    } = this.state;
     const { table = [] } = data;
+    const notificationText = 'Error. Please contact system administrator';
 
     return (
       <>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={notification}
+          autoHideDuration={6000}
+          onClose={this.handleCloseNotification}
+        >
+          <Alert onClose={this.handleCloseNotification} severity="error">
+            {notificationText}
+          </Alert>
+        </Snackbar>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
-          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
+          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row} />)}
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />

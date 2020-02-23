@@ -1,16 +1,32 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Dimmer, Loader, Segment } from 'semantic-ui-react';
 
 import './imageCard.scss';
 
-const ImageCard = props => {
+function ImageCard(props) {
+  const [loaded, setLoadingStatus] = useState(false);
   const { imgName, fullName, sol, cameraShort, cameraFull, roverName, roverStatus } = props.photoData;
 
   return (
     <Card className="photo-card" key={imgName}>
-      <Image src={fullName} wrapped ui={false} />
+      {!loaded && (
+        <Segment className="photo-card__spinner">
+          <Dimmer active>
+            <Loader />
+          </Dimmer>
+
+          <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
+        </Segment>
+      )}
+      <Image
+        className={!loaded && 'photo-card__hide'}
+        src={fullName}
+        wrapped
+        ui={false}
+        onLoad={() => setLoadingStatus(true)}
+      />
       <Card.Content>
         <Card.Header>{`Image ${imgName}`}</Card.Header>
         <Card.Meta>{`Sol: ${sol}`}</Card.Meta>
@@ -32,6 +48,6 @@ const ImageCard = props => {
       </Card.Content>
     </Card>
   );
-};
+}
 
 export default ImageCard;

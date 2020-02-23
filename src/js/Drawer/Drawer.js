@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -17,6 +18,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 import RoversList from '../RoversList';
+import Alert from '../Alert';
 
 import getDrawerInfo from '../api/getDrawerInfo';
 
@@ -30,13 +32,21 @@ class DrawerSide extends Component {
     info: [],
     optionFlags: {},
     solsRange: {},
+    notification: false,
   };
 
   async componentDidMount() {
-    const apiInfo = await getDrawerInfo();
+    let notification = false;
+    let apiInfo;
+    try {
+      apiInfo = await getDrawerInfo();
+    } catch {
+      notification = true;
+    }
+
     const flags = Object.fromEntries(apiInfo.map(key => [key.rover, false]));
     const sols = Object.fromEntries(apiInfo.map(key => [key.rover, [0, key.maxSol]]));
-    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols });
+    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols, notification });
   }
 
   handleChange = rover => {
@@ -85,10 +95,28 @@ class DrawerSide extends Component {
     this.setState({ drawerIsOpen: open });
   };
 
+  handleCloseNotification = () => {
+    this.setState({ notification: false });
+  };
+
   render() {
-    const { drawerIsOpen } = this.state;
+    const { drawerIsOpen, notification } = this.state;
+    const notificationText = 'Error. Please contact system administrator';
     return (
       <>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={notification}
+          autoHideDuration={6000}
+          onClose={this.handleCloseNotification}
+        >
+          <Alert onClose={this.handleCloseNotification} severity="error">
+            {notificationText}
+          </Alert>
+        </Snackbar>
         <Drawer open={drawerIsOpen} onClose={this.toggleDrawer(false)}>
           {this.sideList()}
         </Drawer>
