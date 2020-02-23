@@ -51,10 +51,7 @@ class RoversList extends Component {
                 title={<span className="photo-card__tooltip">{`Full name: ${camera.full_name}`}</span>}
                 placement="right-start"
               >
-                <FormControlLabel
-                  control={<Checkbox value={(console.log(camera), camera.name)} />}
-                  label={camera.name}
-                />
+                <FormControlLabel control={<Checkbox value={camera.name} />} label={camera.name} />
               </Tooltip>
             ))}
             <Typography id="range-slider" gutterBottom>
@@ -66,7 +63,7 @@ class RoversList extends Component {
               value={solsRange[elem.rover]}
               valueLabelDisplay="auto"
               aria-labelledby="range-slider"
-              onChange={event => handleSolChange(event, elem.rover)}
+              onChange={handleSolChange(elem.rover)}
             />
             <FormHelperText>Choose cameras and sols</FormHelperText>
           </NasaCameras>

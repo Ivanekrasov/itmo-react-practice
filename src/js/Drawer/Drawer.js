@@ -43,7 +43,9 @@ class DrawerSide extends Component {
     this.setState({ optionFlags: { ...this.state.optionFlags, [rover]: !this.state.optionFlags[rover] } });
   };
 
-  handleSolChange = () => {};
+  handleSolChange = rover => (event, value) => {
+    this.setState({ solsRange: { ...this.state.solsRange, [rover]: value } });
+  };
 
   sideList = () => (
     <div role="presentation" onKeyDown={this.toggleDrawer(false)}>
