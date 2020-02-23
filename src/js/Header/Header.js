@@ -3,7 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import DraweSide from '../Drawer';
+import DrawerSide from '../Drawer';
 
 import './header.scss';
 
@@ -13,7 +13,7 @@ class Header extends Component {
       <>
         <AppBar className="table-header">
           <Toolbar>
-            <DraweSide />
+            <DrawerSide />
             <Typography variant="h6">Space table</Typography>
           </Toolbar>
         </AppBar>

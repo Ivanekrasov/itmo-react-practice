@@ -68,6 +68,22 @@ class DrawerSide extends Component {
     });
   };
 
+  handleUserQuery = () => {
+    const activeRovers = Object.keys(this.state.optionFlags)
+      .filter(elem => this.state.optionFlags[elem]) // filtering selected rovers
+      .map(rover => {
+        // filtering selected cameras for rover and adding selected sols range
+        return {
+          rover,
+          sols: this.state.solsRange[rover],
+          cameras: [...Object.keys(this.state.cameras[rover]).filter(elem => this.state.cameras[rover][elem])],
+        };
+      });
+    console.log(activeRovers);
+
+    this.toggleDrawer(false);
+  };
+
   sideList = () => (
     <div role="presentation" onKeyDown={this.toggleDrawer(false)}>
       <NasaList>
@@ -91,7 +107,7 @@ class DrawerSide extends Component {
             <FormHelperText>Choose mission of interest</FormHelperText>
           </FormControl>
         </ListItem>
-        <ListItem button onClick={this.toggleDrawer(false)}>
+        <ListItem button onClick={() => this.handleUserQuery()}>
           <ListItemIcon>
             <SearchIcon />
           </ListItemIcon>
@@ -107,7 +123,7 @@ class DrawerSide extends Component {
       return;
     }
 
-    this.setState({ drawerIsOpen: open });
+    this.setState({ drawerIsOpen: open }, () => console.log(this.state.drawerIsOpen));
   };
 
   render() {
