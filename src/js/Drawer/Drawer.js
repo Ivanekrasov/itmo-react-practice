@@ -16,6 +16,8 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
+import { func } from 'prop-types';
+
 import RoversList from '../RoversList';
 
 import getDrawerInfo from '../api/getDrawerInfo';
@@ -37,7 +39,7 @@ class DrawerSide extends Component {
   async componentDidMount() {
     const apiInfo = await getDrawerInfo();
     const flags = Object.fromEntries(apiInfo.map(key => [key.rover, false]));
-    const sols = Object.fromEntries(apiInfo.map(key => [key.rover, [0, key.maxSol]]));
+    const sols = Object.fromEntries(apiInfo.map(key => [key.rover, key.maxSol]));
     const cameras = Object.fromEntries(
       apiInfo.map(key => [
         key.rover,
@@ -68,18 +70,8 @@ class DrawerSide extends Component {
     });
   };
 
-  handleUserQuery = () => {
-    const activeRovers = Object.keys(this.state.optionFlags)
-      .filter(elem => this.state.optionFlags[elem]) // filtering selected rovers
-      .map(rover => {
-        // filtering selected cameras for rover and adding selected sols range
-        return {
-          rover,
-          sols: this.state.solsRange[rover],
-          cameras: [...Object.keys(this.state.cameras[rover]).filter(elem => this.state.cameras[rover][elem])],
-        };
-      });
-    console.log(activeRovers);
+  handleApi = () => {
+    this.props.handleUserQuery(this.state);
 
     this.toggleDrawer(false);
   };
@@ -107,7 +99,7 @@ class DrawerSide extends Component {
             <FormHelperText>Choose mission of interest</FormHelperText>
           </FormControl>
         </ListItem>
-        <ListItem button onClick={() => this.handleUserQuery()}>
+        <ListItem button onClick={() => this.handleApi()}>
           <ListItemIcon>
             <SearchIcon />
           </ListItemIcon>
@@ -140,5 +132,9 @@ class DrawerSide extends Component {
     );
   }
 }
+
+DrawerSide.propTypes = {
+  handleUserQuery: func,
+};
 
 export default DrawerSide;

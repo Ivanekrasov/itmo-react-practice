@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import { func } from 'prop-types';
 import DrawerSide from '../Drawer';
 
 import './header.scss';
@@ -13,7 +14,7 @@ class Header extends Component {
       <>
         <AppBar className="table-header">
           <Toolbar>
-            <DrawerSide />
+            <DrawerSide handleUserQuery={this.props.handleUserQuery} />
             <Typography variant="h6">Space table</Typography>
           </Toolbar>
         </AppBar>
@@ -21,5 +22,9 @@ class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  handleUserQuery: func,
+};
 
 export default Header;

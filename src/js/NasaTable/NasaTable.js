@@ -95,6 +95,8 @@ class NasaTable extends Component {
   async componentDidMount() {
     const { rowsPerPage, page } = this.state;
     const data = await getData();
+    console.log(data);
+
     this.setDataToShow({ rowsPerPage, page, data });
   }
 
