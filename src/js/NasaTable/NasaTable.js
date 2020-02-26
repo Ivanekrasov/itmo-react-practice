@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 
 import ImageDialog from '../ImageDialog';
+import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
 import sorts from '../sorts/sorts';
+import SortSelect from '../SortSelect';
 
 import './nasaTable.scss';
 
@@ -27,7 +25,7 @@ class NasaTable extends Component {
       clickedImage: '',
       clickedImageName: '',
       isDescendingSort: true,
-      sortKey: '',
+      sortKey: 'imgName',
     };
     this.rowsValues = [5, 10, 25];
   }
@@ -40,14 +38,14 @@ class NasaTable extends Component {
       : table.filter((row, i) => i >= from && i < from + rowsRepPage);
   };
 
-  nextPage = () => {
+  switchToNextPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page + 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
     this.setState({ visibleRows, page: page + 1 });
   };
 
-  prevPage = () => {
+  switchToPrevPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page - 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
@@ -99,56 +97,35 @@ class NasaTable extends Component {
   }
 
   render() {
-    const {
-      data,
-      page,
-      rowsPerPage,
-      visibleRows,
-      isModalOpen,
-      clickedImage,
-      clickedImageName,
-      isDescendingSort,
-    } = this.state;
-    const { headers, table = [] } = data;
+    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+    const { table = [] } = data;
 
     return (
       <>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
-        <Table>
-          <TableHead>
-            <TableRow>
-              {headers &&
-                headers.map((header, i) => (
-                  <TableCell className="table-headers" key={i} onClick={() => this.sortData(isDescendingSort, header)}>
-                    {header}
-                  </TableCell>
-                ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {visibleRows &&
-              visibleRows.map((row, i) => (
-                <TableRow key={i}>{headers.map((cell, j) => this.fillCell(row, j))}</TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={this.rowsValues}
-          component="div"
-          count={table && table.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangeRowsPerPage={this.changeRow}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-            onClick: this.prevPage,
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-            onClick: this.nextPage,
-          }}
-          onChangePage={() => {}}
-        />
+        <div className="container">
+          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
+        </div>
+        <div className="bottom-info">
+          <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
+          <TablePagination
+            rowsPerPageOptions={this.rowsValues}
+            component="div"
+            count={table && table.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangeRowsPerPage={this.changeRow}
+            backIconButtonProps={{
+              'aria-label': 'Previous Page',
+              onClick: this.switchToPrevPage,
+            }}
+            nextIconButtonProps={{
+              'aria-label': 'Next Page',
+              onClick: this.switchToNextPage,
+            }}
+            onChangePage={() => {}}
+          />
+        </div>
       </>
     );
   }

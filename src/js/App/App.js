@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import NasaTable from '../NasaTable';
 import Header from '../Header';
-
 import sorts from '../sorts/sorts';
 import getInfoFromAPI from '../api/api';
 
