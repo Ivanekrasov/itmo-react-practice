@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
-
 import TablePagination from '@material-ui/core/TablePagination';
 
 import ImageDialog from '../ImageDialog';
@@ -8,7 +7,6 @@ import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
 import getData from '../api/api';
 import sorts from '../sorts/sorts';
-
 import SortSelect from '../SortSelect';
 
 import './nasaTable.scss';
@@ -40,14 +38,14 @@ class NasaTable extends Component {
       : table.filter((row, i) => i >= from && i < from + rowsRepPage);
   };
 
-  nextPage = () => {
+  switchToNextPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page + 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
     this.setState({ visibleRows, page: page + 1 });
   };
 
-  prevPage = () => {
+  switchToPrevPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page - 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
@@ -119,11 +117,11 @@ class NasaTable extends Component {
             onChangeRowsPerPage={this.changeRow}
             backIconButtonProps={{
               'aria-label': 'Previous Page',
-              onClick: this.prevPage,
+              onClick: this.switchToPrevPage,
             }}
             nextIconButtonProps={{
               'aria-label': 'Next Page',
-              onClick: this.nextPage,
+              onClick: this.switchToNextPage,
             }}
             onChangePage={() => {}}
           />
