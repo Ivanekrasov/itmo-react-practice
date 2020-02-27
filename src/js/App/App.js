@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 
-import './App.scss';
 import NasaTable from '../NasaTable';
 import Header from '../Header';
-
 import getInfoFromAPI from '../api/api';
+
+import './App.scss';
 
 class App extends Component {
   state = {
-    data: [],
+    data: {
+      headers: [],
+      table: [],
+    },
   };
 
   async componentDidMount() {
-    this.setState(await getInfoFromAPI());
+    this.setState({ data: { ...(await getInfoFromAPI()) } }, () => console.log('app state mount', this.state));
   }
 
   handleUserQuery = async state => {
@@ -37,7 +40,7 @@ class App extends Component {
           table: promiseArray.map(element => element.table).flat(),
         },
       },
-      () => console.log(this.state.data),
+      () => console.log('app state', this.state),
     );
   };
 
