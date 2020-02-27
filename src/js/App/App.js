@@ -19,6 +19,8 @@ class App extends Component {
     const activeRovers = Object.keys(state.optionFlags)
       .filter(elem => state.optionFlags[elem]) // filtering selected rovers
       .map(rover => {
+        console.log(state.solsRange[rover]);
+
         // filtering selected cameras for rover and adding selected sols range
         return {
           rover,
@@ -27,7 +29,7 @@ class App extends Component {
         };
       });
     const promiseArray = await Promise.all(
-      activeRovers.map(elem => getInfoFromAPI([elem.rover], elem.sols, elem.cameras)), // pending info from api
+      activeRovers.map(elem => getInfoFromAPI([elem.rover], [elem.sol], elem.cameras)), // pending info from api
     );
 
     this.setState(
