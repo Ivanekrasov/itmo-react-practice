@@ -1,15 +1,13 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
-
 import TablePagination from '@material-ui/core/TablePagination';
-
+import { object } from 'prop-types';
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
-import sorts from '../sorts/sorts';
-
 import SortSelect from '../SortSelect';
+
+import sorts from '../sorts/sorts';
 
 import './nasaTable.scss';
 
@@ -66,7 +64,6 @@ class NasaTable extends Component {
 
   setDataToShow = ({ rowsPerPage, page, data, sortKey, isDescendingSort }) => {
     const from = rowsPerPage * page;
-    console.log('error', data);
 
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage, sortKey, isDescendingSort);
     this.setState({ data, visibleRows });
@@ -77,14 +74,10 @@ class NasaTable extends Component {
       const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
       this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
     }
-    console.log('PREV ПРОПСЫ', prevProps);
-
-    console.log(this.props.data.table);
 
     if (prevProps.data.table.length !== this.props.data.table.length) {
       const { rowsPerPage, page, sortKey, isDescendingSort } = this.state;
       const newData = this.props;
-      console.log('newData', newData);
 
       this.setDataToShow({ rowsPerPage, page, data: newData.data, sortKey, isDescendingSort });
     }
@@ -108,19 +101,12 @@ class NasaTable extends Component {
     this.setState({ isModalOpen: true, clickedImage: img, clickedImageName: name });
   };
 
-  async componentDidMount() {
-    // const { rowsPerPage, page } = this.state;
-    // const data = await getData();
-    // this.setDataToShow({ rowsPerPage, page, data });
-  }
-
   render() {
     const { page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
-    // eslint-disable-next-line react/prop-types
+
     const { data } = this.props;
-    // eslint-disable-next-line react/prop-types
+
     const { table = [] } = data;
-    console.log('nasa table state', this.state);
 
     return (
       <>
@@ -152,5 +138,9 @@ class NasaTable extends Component {
     );
   }
 }
+
+NasaTable.propTypes = {
+  data: object,
+};
 
 export default NasaTable;

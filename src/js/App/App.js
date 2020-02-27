@@ -15,7 +15,7 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    this.setState({ data: { ...(await getInfoFromAPI()) } }, () => console.log('app state mount', this.state));
+    this.setState({ data: { ...(await getInfoFromAPI()) } });
   }
 
   handleUserQuery = async state => {
@@ -29,19 +29,17 @@ class App extends Component {
           cameras: [...Object.keys(state.cameras[rover]).filter(elem => state.cameras[rover][elem])],
         };
       });
+
     const promiseArray = await Promise.all(
-      activeRovers.map(elem => getInfoFromAPI([elem.rover], elem.sols, elem.cameras)), // pending info from api
+      activeRovers.map(elem => getInfoFromAPI([elem.rover], [elem.sol], elem.cameras)), // pending info from api
     );
 
-    this.setState(
-      {
-        data: {
-          headers: promiseArray[0].headers,
-          table: promiseArray.map(element => element.table).flat(),
-        },
+    this.setState({
+      data: {
+        headers: promiseArray[0].headers,
+        table: promiseArray.map(element => element.table).flat(),
       },
-      () => console.log('app state', this.state),
-    );
+    });
   };
 
   render() {

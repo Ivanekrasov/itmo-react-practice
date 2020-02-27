@@ -115,7 +115,7 @@ class DrawerSide extends Component {
       return;
     }
 
-    this.setState({ drawerIsOpen: open }, () => console.log(this.state.drawerIsOpen));
+    this.setState({ drawerIsOpen: open });
   };
 
   render() {
