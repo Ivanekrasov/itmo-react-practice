@@ -41,14 +41,14 @@ class NasaTable extends Component {
       : table.filter((row, i) => i >= from && i < from + rowsRepPage);
   };
 
-  nextPage = () => {
+  switchToNextPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page + 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
     this.setState({ visibleRows, page: page + 1 });
   };
 
-  prevPage = () => {
+  switchToPrevPage = () => {
     const { rowsPerPage, page, data } = this.state;
     const from = rowsPerPage * (page - 1);
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
@@ -125,11 +125,11 @@ class NasaTable extends Component {
             onChangeRowsPerPage={this.changeRow}
             backIconButtonProps={{
               'aria-label': 'Previous Page',
-              onClick: this.prevPage,
+              onClick: this.switchToPrevPage,
             }}
             nextIconButtonProps={{
               'aria-label': 'Next Page',
-              onClick: this.nextPage,
+              onClick: this.switchToNextPage,
             }}
             onChangePage={() => {}}
           />

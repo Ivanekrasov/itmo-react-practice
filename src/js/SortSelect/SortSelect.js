@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { styled } from '@material-ui/core/styles';
-
 import { bool, func } from 'prop-types';
+
 import headersMapping from '../api/tableHeadersMapping';
 
-const NasaForm = styled(FormControl)({
-  minWidth: 80,
-});
+import './sortSelect.scss';
 
 class SortSelect extends Component {
   handleChange = event => {
@@ -20,24 +16,19 @@ class SortSelect extends Component {
 
   render() {
     return (
-      <NasaForm className="form">
+      <FormControl className="form">
         <InputLabel id="nasa-simple-select-label">Sort by:</InputLabel>
-        <Select
-          labelId="nasa-simple-select-label"
-          id="nasa-simple-select"
-          autoWidth={true}
-          onChange={this.handleChange}
-        >
+        <Select labelId="nasa-simple-select-label" id="nasa-simple-select" autoWidth onChange={this.handleChange}>
           {Object.keys(headersMapping).map(element => {
-            if (element === 'Full camera name') return true;
-            return (
+            const FULL_CAMERA_NAME = 'Full camera name';
+            return element === FULL_CAMERA_NAME ? null : (
               <MenuItem key={element} value={element}>
                 {element}
               </MenuItem>
             );
           })}
         </Select>
-      </NasaForm>
+      </FormControl>
     );
   }
 }

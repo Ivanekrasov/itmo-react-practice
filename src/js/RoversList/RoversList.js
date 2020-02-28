@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
-
-import { styled } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
-
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-
 import { object, func } from 'prop-types';
 
-const NasaExpansion = styled(MuiExpansionPanel)({
-  boxShadow: 'none',
-});
-
-const NasaCameras = styled(MuiExpansionPanelDetails)({
-  display: 'flex',
-  flexDirection: 'column',
-  border: '1px solid grey',
-});
+import './roversList.scss';
 
 class RoversList extends Component {
   render() {
@@ -31,7 +18,7 @@ class RoversList extends Component {
 
     return (
       <div key={elem.rover} className="rover-info">
-        <NasaExpansion square expanded={optionFlags[elem.rover]}>
+        <MuiExpansionPanel square expanded={optionFlags[elem.rover]}>
           <MuiExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
             <FormControlLabel
               control={
@@ -44,7 +31,7 @@ class RoversList extends Component {
               label={elem.rover}
             />
           </MuiExpansionPanelSummary>
-          <NasaCameras>
+          <MuiExpansionPanelDetails>
             {elem.cameras.map(camera => (
               <Tooltip
                 key={camera.name}
@@ -75,8 +62,8 @@ class RoversList extends Component {
               onChange={handleSolChange(elem.rover)}
             />
             <FormHelperText>Choose cameras and sols</FormHelperText>
-          </NasaCameras>
-        </NasaExpansion>
+          </MuiExpansionPanelDetails>
+        </MuiExpansionPanel>
       </div>
     );
   }
