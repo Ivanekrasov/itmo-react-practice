@@ -112,7 +112,19 @@ class NasaTable extends Component {
       <>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
-          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
+          {visibleRows &&
+            visibleRows.map((row, i) => (
+              <div
+                key={i}
+                className="card-wrapper"
+                onClick={() => {
+                  console.log(row.fullName);
+                  this.openDialog(row.fullName, row.imgName);
+                }}
+              >
+                <ImageCard key={i} photoData={row}></ImageCard>
+              </div>
+            ))}
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
