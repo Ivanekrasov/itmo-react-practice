@@ -22,8 +22,6 @@ class App extends Component {
     const activeRovers = Object.keys(state.optionFlags)
       .filter(elem => state.optionFlags[elem]) // filtering selected rovers
       .map(rover => {
-        console.log(state.solsRange[rover]);
-
         // filtering selected cameras for rover and adding selected sols range
         return {
           rover,

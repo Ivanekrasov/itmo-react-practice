@@ -72,7 +72,8 @@ class DrawerSide extends Component {
             handlers={{
               handleChange: this.handleChange,
               handleSolChange: this.handleSolChange,
-              toggleDrawer: this.toggleDrawer,
+              handleCameraChange: this.handleCameraChange,
+              handleApi: this.handleApi,
             }}
           />
         </Drawer>
