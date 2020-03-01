@@ -72,9 +72,6 @@ class NasaTable extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.visibleRows !== this.state.visibleRows) {
-      this.setState({ nothingIsUploaded: true });
-    }
     if (prevState.isDescendingSort !== this.state.isDescendingSort) {
       const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
       this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
