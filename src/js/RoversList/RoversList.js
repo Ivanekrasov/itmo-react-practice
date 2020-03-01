@@ -14,7 +14,7 @@ import './roversList.scss';
 
 class RoversList extends Component {
   render() {
-    const { elem, handleChange, handleSolChange, optionFlags, solsRange } = this.props;
+    const { elem, handleChange, handleSolChange, handleCameraChange, optionFlags, solsRange, cameras } = this.props;
 
     return (
       <div key={elem.rover} className="rover-info">
@@ -38,7 +38,16 @@ class RoversList extends Component {
                 title={<span className="photo-card__tooltip">{`Full name: ${camera.full_name}`}</span>}
                 placement="right-start"
               >
-                <FormControlLabel control={<Checkbox value={camera.name} />} label={camera.name} />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={camera.name}
+                      checked={cameras[elem.rover][camera.name]}
+                      onChange={() => handleCameraChange(elem.rover, camera.name)}
+                    />
+                  }
+                  label={camera.name}
+                />
               </Tooltip>
             ))}
             <Typography id="range-slider" gutterBottom>
@@ -50,7 +59,7 @@ class RoversList extends Component {
               value={solsRange[elem.rover]}
               valueLabelDisplay="auto"
               aria-labelledby="range-slider"
-              onChange={event => handleSolChange(event, elem.rover)}
+              onChange={handleSolChange(elem.rover)}
             />
             <FormHelperText>Choose cameras and sols</FormHelperText>
           </MuiExpansionPanelDetails>
@@ -64,8 +73,10 @@ RoversList.propTypes = {
   elem: object,
   handleChange: func,
   handleSolChange: func,
+  handleCameraChange: func,
   optionFlags: object,
   solsRange: object,
+  cameras: object,
 };
 
 export default RoversList;

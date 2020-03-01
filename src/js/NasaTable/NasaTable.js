@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
-
+import { object } from 'prop-types';
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
-import getData from '../api/api';
-import sorts from '../sorts/sorts';
 import SortSelect from '../SortSelect';
+
+import sorts from '../sorts/sorts';
 
 import './nasaTable.scss';
 
@@ -17,7 +17,10 @@ class NasaTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {},
+      data: {
+        headers: [],
+        table: [],
+      },
       visibleRows: null,
       page: 0,
       rowsPerPage: 10,
@@ -61,6 +64,7 @@ class NasaTable extends Component {
 
   setDataToShow = ({ rowsPerPage, page, data, sortKey, isDescendingSort }) => {
     const from = rowsPerPage * page;
+
     const visibleRows = this.getDataToShow(data.table, from, rowsPerPage, sortKey, isDescendingSort);
     this.setState({ data, visibleRows });
   };
@@ -69,6 +73,13 @@ class NasaTable extends Component {
     if (prevState.isDescendingSort !== this.state.isDescendingSort) {
       const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
       this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
+    }
+
+    if (prevProps.data.table.length !== this.props.data.table.length) {
+      const { rowsPerPage, page, sortKey, isDescendingSort } = this.state;
+      const newData = this.props;
+
+      this.setDataToShow({ rowsPerPage, page, data: newData.data, sortKey, isDescendingSort });
     }
   }
 
@@ -90,21 +101,30 @@ class NasaTable extends Component {
     this.setState({ isModalOpen: true, clickedImage: img, clickedImageName: name });
   };
 
-  async componentDidMount() {
-    const { rowsPerPage, page } = this.state;
-    const data = await getData();
-    this.setDataToShow({ rowsPerPage, page, data });
-  }
-
   render() {
-    const { data, page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+    const { page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+
+    const { data } = this.props;
+
     const { table = [] } = data;
 
     return (
       <>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
-          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
+          {visibleRows &&
+            visibleRows.map((row, i) => (
+              <div
+                key={i}
+                className="card-wrapper"
+                onClick={() => {
+                  console.log(row.fullName);
+                  this.openDialog(row.fullName, row.imgName);
+                }}
+              >
+                <ImageCard key={i} photoData={row}></ImageCard>
+              </div>
+            ))}
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
@@ -130,5 +150,9 @@ class NasaTable extends Component {
     );
   }
 }
+
+NasaTable.propTypes = {
+  data: object,
+};
 
 export default NasaTable;

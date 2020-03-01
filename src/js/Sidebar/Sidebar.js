@@ -26,8 +26,10 @@ const SideBar = props => (
               <RoversList
                 key={elem.rover}
                 elem={elem}
+                cameras={props.state.cameras}
                 handleChange={props.handlers.handleChange}
                 handleSolChange={props.handlers.handleSolChange}
+                handleCameraChange={props.handlers.handleCameraChange}
                 optionFlags={props.state.optionFlags}
                 solsRange={props.state.solsRange}
               />
@@ -36,7 +38,7 @@ const SideBar = props => (
           <FormHelperText>Choose mission of interest</FormHelperText>
         </FormControl>
       </ListItem>
-      <ListItem button onClick={() => props.handlers.toggleDrawer(false)}>
+      <ListItem button onClick={() => props.handlers.handleApi()}>
         <ListItemIcon>
           <SearchIcon />
         </ListItemIcon>
@@ -52,6 +54,8 @@ SideBar.propTypes = {
   handlers: shape({
     handleChange: func,
     handleSolChange: func,
+    handleCameraChange: func,
+    handleApi: func,
   }),
 };
 

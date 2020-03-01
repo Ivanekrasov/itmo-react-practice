@@ -3,7 +3,10 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import { func } from 'prop-types';
+
 import getDrawerInfo from '../api/getDrawerInfo';
+// import getData from '../api/api';
 import Sidebar from '../Sidebar';
 
 class DrawerSide extends Component {
@@ -12,20 +15,48 @@ class DrawerSide extends Component {
     info: [],
     optionFlags: {},
     solsRange: {},
+    cameras: {},
   };
 
   async componentDidMount() {
     const apiInfo = await getDrawerInfo();
     const flags = Object.fromEntries(apiInfo.map(key => [key.rover, false]));
-    const sols = Object.fromEntries(apiInfo.map(key => [key.rover, [0, key.maxSol]]));
-    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols });
+    const sols = Object.fromEntries(apiInfo.map(key => [key.rover, key.maxSol]));
+    const cameras = Object.fromEntries(
+      apiInfo.map(key => [
+        key.rover,
+        Object.fromEntries(
+          key.cameras.map(cam => {
+            return [cam.name, false];
+          }),
+        ),
+      ]),
+    );
+    this.setState({ info: apiInfo, optionFlags: flags, solsRange: sols, cameras });
   }
 
   handleChange = rover => {
     this.setState({ optionFlags: { ...this.state.optionFlags, [rover]: !this.state.optionFlags[rover] } });
   };
 
-  handleSolChange = () => {};
+  handleSolChange = rover => (event, value) => {
+    this.setState({ solsRange: { ...this.state.solsRange, [rover]: value } });
+  };
+
+  handleCameraChange = (rover, camera) => {
+    this.setState({
+      cameras: {
+        ...this.state.cameras,
+        [rover]: { ...this.state.cameras[rover], [camera]: !this.state.cameras[rover][camera] },
+      },
+    });
+  };
+
+  handleApi = () => {
+    this.props.handleUserQuery(this.state);
+
+    this.toggleDrawer(false);
+  };
 
   toggleDrawer = isOpen => {
     this.setState({ drawerIsOpen: isOpen });
@@ -41,7 +72,8 @@ class DrawerSide extends Component {
             handlers={{
               handleChange: this.handleChange,
               handleSolChange: this.handleSolChange,
-              toggleDrawer: this.toggleDrawer,
+              handleCameraChange: this.handleCameraChange,
+              handleApi: this.handleApi,
             }}
           />
         </Drawer>
@@ -52,5 +84,9 @@ class DrawerSide extends Component {
     );
   }
 }
+
+DrawerSide.propTypes = {
+  handleUserQuery: func,
+};
 
 export default DrawerSide;
