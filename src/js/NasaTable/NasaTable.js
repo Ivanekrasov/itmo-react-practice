@@ -2,43 +2,45 @@ import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import { object } from 'prop-types';
 import Pagination from '@material-ui/lab/Pagination';
+
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
 import SortSelect from '../SortSelect';
-
 import sorts from '../sorts/sorts';
+import RowsNumSelect from '../CardsNumSelect';
 
 import './nasaTable.scss';
+
+const appSettings = {
+  cardsPerPage: 5,
+  cardsNumberOptions: [5, 10, 25],
+};
 
 const tableHeaders = Object.keys(headersMapping);
 
 class NasaTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: {
-        headers: [],
-        table: [],
-      },
-      visibleRows: null,
-      page: 0,
-      rowsPerPage: 5,
-      isModalOpen: false,
-      clickedImage: '',
-      clickedImageName: '',
-      isDescendingSort: true,
-      sortKey: 'imgName',
-    };
-    this.rowsValues = [5, 10, 25];
-  }
+  state = {
+    data: {
+      headers: [],
+      table: [],
+    },
+    visibleRows: null,
+    page: 0,
+    rowsPerPage: appSettings.cardsPerPage,
+    isModalOpen: false,
+    clickedImage: '',
+    clickedImageName: '',
+    isDescendingSort: true,
+    sortKey: 'imgName',
+  };
 
   handleClose = () => this.setState({ isModalOpen: false });
 
-  getDataToShow = (table, from, rowsRepPage, sortKey, isDescendingSort) => {
+  getDataToShow = (table, from, rowsPerPage, sortKey, isDescendingSort) => {
     return sortKey
-      ? sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsRepPage)
-      : table.filter((row, i) => i >= from && i < from + rowsRepPage);
+      ? sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsPerPage)
+      : table.filter((row, i) => i >= from && i < from + rowsPerPage);
   };
 
   changeRow = e => {
@@ -56,15 +58,17 @@ class NasaTable extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
     if (prevState.isDescendingSort !== this.state.isDescendingSort) {
-      const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
+      this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
+    }
+
+    if (prevState.rowsPerPage !== this.state.rowsPerPage) {
       this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
     }
 
     if (prevProps.data.table.length !== this.props.data.table.length) {
-      const { rowsPerPage, page, sortKey, isDescendingSort } = this.state;
       const newData = this.props;
-
       this.setDataToShow({ rowsPerPage, page, data: newData.data, sortKey, isDescendingSort });
     }
   }
@@ -99,11 +103,13 @@ class NasaTable extends Component {
     );
   };
 
+  handleRowsNumChange = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   render() {
     const { page, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
-
     const { data } = this.props;
-
     const { table = [] } = data;
 
     return (
@@ -116,7 +122,6 @@ class NasaTable extends Component {
                 key={i}
                 className="card-wrapper"
                 onClick={() => {
-                  console.log(row.fullName);
                   this.openDialog(row.fullName, row.imgName);
                 }}
               >
@@ -126,27 +131,15 @@ class NasaTable extends Component {
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
-          {/* <TablePagination
-            rowsPerPageOptions={this.rowsValues}
-            component="div"
-            count={table && table.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangeRowsPerPage={this.changeRow}
-            backIconButtonProps={{
-              'aria-label': 'Previous Page',
-              onClick: this.switchToPrevPage,
-            }}
-            nextIconButtonProps={{
-              'aria-label': 'Next Page',
-              onClick: this.switchToNextPage,
-            }}
-            onChangePage={() => {}}
-          /> */}
+          <RowsNumSelect
+            rowsValues={appSettings.cardsNumberOptions}
+            handleRowsNumChange={this.handleRowsNumChange}
+            defaultValue={appSettings.cardsPerPage}
+          ></RowsNumSelect>
           <Pagination
             page={page + 1}
             onChange={this.handlePageChange}
-            count={table && Math.ceil(table.length / 5)}
+            count={table && Math.ceil(table.length / this.state.rowsPerPage)}
           ></Pagination>
         </div>
       </>
