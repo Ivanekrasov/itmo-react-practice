@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
 import { object } from 'prop-types';
+import Pagination from '@material-ui/lab/Pagination';
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
@@ -23,7 +23,7 @@ class NasaTable extends Component {
       },
       visibleRows: null,
       page: 0,
-      rowsPerPage: 10,
+      rowsPerPage: 5,
       isModalOpen: false,
       clickedImage: '',
       clickedImageName: '',
@@ -39,20 +39,6 @@ class NasaTable extends Component {
     return sortKey
       ? sorts(table, sortKey, isDescendingSort).filter((row, i) => i >= from && i < from + rowsRepPage)
       : table.filter((row, i) => i >= from && i < from + rowsRepPage);
-  };
-
-  switchToNextPage = () => {
-    const { rowsPerPage, page, data } = this.state;
-    const from = rowsPerPage * (page + 1);
-    const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
-    this.setState({ visibleRows, page: page + 1 });
-  };
-
-  switchToPrevPage = () => {
-    const { rowsPerPage, page, data } = this.state;
-    const from = rowsPerPage * (page - 1);
-    const visibleRows = this.getDataToShow(data.table, from, rowsPerPage);
-    this.setState({ visibleRows, page: page - 1 });
   };
 
   changeRow = e => {
@@ -101,8 +87,20 @@ class NasaTable extends Component {
     this.setState({ isModalOpen: true, clickedImage: img, clickedImageName: name });
   };
 
+  handlePageChange = (event, page) => {
+    const { rowsPerPage, data, sortKey, isDescendingSort } = this.state;
+    this.setState(
+      {
+        page: page - 1,
+      },
+      () => {
+        this.setDataToShow({ rowsPerPage, page: page - 1, data, sortKey, isDescendingSort });
+      },
+    );
+  };
+
   render() {
-    const { page, rowsPerPage, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+    const { page, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
 
     const { data } = this.props;
 
@@ -128,7 +126,7 @@ class NasaTable extends Component {
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
-          <TablePagination
+          {/* <TablePagination
             rowsPerPageOptions={this.rowsValues}
             component="div"
             count={table && table.length}
@@ -144,7 +142,12 @@ class NasaTable extends Component {
               onClick: this.switchToNextPage,
             }}
             onChangePage={() => {}}
-          />
+          /> */}
+          <Pagination
+            page={page + 1}
+            onChange={this.handlePageChange}
+            count={table && Math.ceil(table.length / 5)}
+          ></Pagination>
         </div>
       </>
     );
