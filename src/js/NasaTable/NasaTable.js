@@ -118,7 +118,6 @@ class NasaTable extends Component {
                 key={i}
                 className="card-wrapper"
                 onClick={() => {
-                  console.log(row.fullName);
                   this.openDialog(row.fullName, row.imgName);
                 }}
               >

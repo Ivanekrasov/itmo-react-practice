@@ -10,7 +10,12 @@ import headersMapping from '../api/tableHeadersMapping';
 import './sortSelect.scss';
 
 class SortSelect extends Component {
+  state = {
+    inputValue: '',
+  };
+
   handleChange = event => {
+    this.setState({ inputValue: event.target.value });
     this.props.sortData(this.props.isDescendingSort, event.target.value);
   };
 
@@ -18,7 +23,13 @@ class SortSelect extends Component {
     return (
       <FormControl className="form">
         <InputLabel id="nasa-simple-select-label">Sort by:</InputLabel>
-        <Select labelId="nasa-simple-select-label" id="nasa-simple-select" autoWidth onChange={this.handleChange}>
+        <Select
+          labelId="nasa-simple-select-label"
+          id="nasa-simple-select"
+          autoWidth
+          onChange={this.handleChange}
+          value={this.state.inputValue}
+        >
           {Object.keys(headersMapping).map(element => {
             const FULL_CAMERA_NAME = 'Full camera name';
             return element === FULL_CAMERA_NAME ? null : (
