@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Card, Image } from 'semantic-ui-react';
+import { string, number, shape } from 'prop-types';
 
 import './imageCard.scss';
 
@@ -32,6 +32,18 @@ const ImageCard = props => {
       </Card.Content>
     </Card>
   );
+};
+
+ImageCard.propTypes = {
+  photoData: shape({
+    imgName: string,
+    fullName: string,
+    sol: number,
+    cameraShort: string,
+    cameraFull: string,
+    roverName: string,
+    roverStatus: string,
+  }),
 };
 
 export default ImageCard;
