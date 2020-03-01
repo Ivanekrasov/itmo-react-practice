@@ -48,7 +48,7 @@ async function getInfoFromAPI(rover = TEST_ROVER, sol = TEST_SOL, camera = TEST_
       table: tableInfo,
     };
   } catch (error) {
-    return { table: [] };
+    throw new Error(error);
   }
 }
 

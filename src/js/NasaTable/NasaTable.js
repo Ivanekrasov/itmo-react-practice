@@ -3,6 +3,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import Snackbar from '@material-ui/core/Snackbar';
 
+import RingLoader from 'react-spinners/RingLoader';
+
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
 import headersMapping from '../api/tableHeadersMapping';
@@ -29,6 +31,7 @@ class NasaTable extends Component {
       isDescendingSort: true,
       sortKey: 'imgName',
       notification: false,
+      nothingIsUploaded: true,
     };
     this.rowsValues = [5, 10, 25];
   }
@@ -69,6 +72,9 @@ class NasaTable extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.visibleRows !== this.state.visibleRows) {
+      this.setState({ nothingIsUploaded: true });
+    }
     if (prevState.isDescendingSort !== this.state.isDescendingSort) {
       const { rowsPerPage, page, data, sortKey, isDescendingSort } = this.state;
       this.setDataToShow({ rowsPerPage, page, data, sortKey, isDescendingSort });
@@ -110,6 +116,10 @@ class NasaTable extends Component {
     this.setState({ notification: false });
   };
 
+  setFirstLoad = flag => {
+    this.setState({ nothingIsUploaded: flag });
+  };
+
   render() {
     const {
       data,
@@ -141,7 +151,16 @@ class NasaTable extends Component {
         </Snackbar>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
-          {visibleRows && visibleRows.map((row, i) => <ImageCard key={i} photoData={row}></ImageCard>)}
+          <RingLoader loading={this.state.nothingIsUploaded} color={'green'} size={120} />
+          {visibleRows &&
+            visibleRows.map((row, i) => (
+              <ImageCard
+                key={i}
+                photoData={row}
+                setFirstLoad={this.setFirstLoad}
+                loadFlag={this.state.nothingIsUploaded}
+              ></ImageCard>
+            ))}
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
