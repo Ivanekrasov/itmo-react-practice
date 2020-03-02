@@ -144,7 +144,9 @@ class NasaTable extends Component {
         </Snackbar>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
-          <RingLoader loading={this.state.nothingIsUploaded} color={'white'} size={510} />
+          <div className="preloader">
+            <RingLoader loading={this.state.nothingIsUploaded} color={'white'} size={350} />
+          </div>
           {visibleRows &&
             visibleRows.map((row, i) => (
               <div
