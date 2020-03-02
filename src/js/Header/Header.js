@@ -10,9 +10,10 @@ import './header.scss';
 
 const Header = props => (
   <AppBar className="table-header">
-    <Toolbar>
+    <Toolbar className="table-header__toolbar">
       <DraweSide handleUserQuery={props.handleUserQuery} />
-      <Typography variant="h6">Space table</Typography>
+      <Typography variant="h6">Mars Missions</Typography>
+      <img src="/assets/img/main-logo.png" alt="123" className="table-header__logo" />
     </Toolbar>
   </AppBar>
 );

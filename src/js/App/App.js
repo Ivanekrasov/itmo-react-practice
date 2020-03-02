@@ -44,10 +44,10 @@ class App extends Component {
 
   render() {
     return (
-      <>
+      <div className="main-container">
         <Header handleUserQuery={this.handleUserQuery} />
         <NasaTable className="container" data={this.state.data} />
-      </>
+      </div>
     );
   }
 }

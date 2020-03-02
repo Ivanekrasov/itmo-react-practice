@@ -1,4 +1,13 @@
 .table-header.table-header {
     position: sticky;
-    background-color: #004d40;
+    background-color: #022483;
+}
+
+.table-header__logo {
+    width: 50px;
+}
+
+.table-header__toolbar {
+    display: flex;
+    justify-content: flex-start;
 }

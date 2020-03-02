@@ -1,1 +1,7 @@
 @import '../../scss/main.scss';
+
+.main-container {
+    background-image: url('../../img/main-background.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
