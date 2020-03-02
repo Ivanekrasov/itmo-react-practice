@@ -6,7 +6,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { func } from 'prop-types';
 
 import getDrawerInfo from '../api/getDrawerInfo';
-// import getData from '../api/api';
 import Sidebar from '../Sidebar';
 
 class DrawerSide extends Component {
