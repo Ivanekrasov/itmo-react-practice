@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import { object } from 'prop-types';
 import Pagination from '@material-ui/lab/Pagination';
+import Snackbar from '@material-ui/core/Snackbar';
+
+import RingLoader from 'react-spinners/RingLoader';
 
 import ImageDialog from '../ImageDialog';
 import ImageCard from '../ImageCard';
@@ -9,6 +12,7 @@ import headersMapping from '../api/tableHeadersMapping';
 import SortSelect from '../SortSelect';
 import sorts from '../sorts/sorts';
 import RowsNumSelect from '../CardsNumSelect';
+import Alert from '../Alert';
 
 import './nasaTable.scss';
 
@@ -33,6 +37,8 @@ class NasaTable extends Component {
     clickedImageName: '',
     isDescendingSort: true,
     sortKey: 'imgName',
+    notification: false,
+    nothingIsUploaded: true,
   };
 
   handleClose = () => this.setState({ isModalOpen: false });
@@ -107,15 +113,38 @@ class NasaTable extends Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
+  handleCloseNotification = () => {
+    this.setState({ notification: false });
+  };
+
+  setFirstLoad = flag => {
+    this.setState({ nothingIsUploaded: flag });
+  };
+
   render() {
-    const { page, visibleRows, isModalOpen, clickedImage, clickedImageName } = this.state;
+    const { page, visibleRows, isModalOpen, clickedImage, clickedImageName, notification } = this.state;
     const { data } = this.props;
     const { table = [] } = data;
+    const notificationText = 'Error. Please contact system administrator';
 
     return (
       <>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={notification}
+          autoHideDuration={6000}
+          onClose={this.handleCloseNotification}
+        >
+          <Alert onClose={this.handleCloseNotification} severity="error">
+            {notificationText}
+          </Alert>
+        </Snackbar>
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
+          <RingLoader loading={this.state.nothingIsUploaded} color={'white'} size={510} />
           {visibleRows &&
             visibleRows.map((row, i) => (
               <div
@@ -125,7 +154,12 @@ class NasaTable extends Component {
                   this.openDialog(row.fullName, row.imgName);
                 }}
               >
-                <ImageCard key={i} photoData={row}></ImageCard>
+                <ImageCard
+                  key={i}
+                  photoData={row}
+                  setFirstLoad={this.setFirstLoad}
+                  loadFlag={this.state.nothingIsUploaded}
+                ></ImageCard>
               </div>
             ))}
         </div>

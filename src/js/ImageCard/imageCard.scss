@@ -10,4 +10,13 @@
   &__tooltip {
     font-size: 15px;
   }
+
+  &__spinner {
+    min-height: 290px !important;
+    margin: 0 !important;
+  }
+
+  &__hide {
+    display: none !important;
+  }
 }
