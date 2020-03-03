@@ -1,5 +1,5 @@
 {
-  "name": "NASA Mars Mission",
+  "name": "nasa-mars-mission",
   "version": "1.0.0",
   "description": "App for searching Mars rover's information and photos",
   "main": "index.js",
