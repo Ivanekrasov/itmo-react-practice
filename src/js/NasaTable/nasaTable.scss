@@ -2,7 +2,7 @@
 
 .table-headers.table-headers {
   background-color: #26a69a;
-  color: white;
+  color: $main-font-color;
 }
 
 .first-item.first-item {
@@ -45,4 +45,18 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.MuiPaginationItem-page {
+  color: $main-font-color !important;
+}
+
+.MuiInput-underline {
+  &::before {
+    border-color: $main-font-color !important;
+  }
+}
+
+.MuiSelect-icon {
+  color: $main-font-color !important;
 }

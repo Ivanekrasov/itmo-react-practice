@@ -22,13 +22,16 @@ class SortSelect extends Component {
   render() {
     return (
       <FormControl className="form">
-        <InputLabel id="nasa-simple-select-label">Sort by:</InputLabel>
+        <InputLabel id="nasa-simple-select-label" className="nasa-simple-select-label">
+          Sort by:
+        </InputLabel>
         <Select
           labelId="nasa-simple-select-label"
           id="nasa-simple-select"
           autoWidth
           onChange={this.handleChange}
           value={this.state.inputValue}
+          className="nasa-simple-select"
         >
           {Object.keys(headersMapping).map(element => {
             const FULL_CAMERA_NAME = 'Full camera name';
