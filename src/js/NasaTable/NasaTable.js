@@ -29,7 +29,7 @@ class NasaTable extends Component {
       headers: [],
       table: [],
     },
-    visibleRows: null,
+    visibleRows: [],
     page: 0,
     rowsPerPage: appSettings.cardsPerPage,
     isModalOpen: false,
@@ -122,7 +122,15 @@ class NasaTable extends Component {
   };
 
   render() {
-    const { page, visibleRows, isModalOpen, clickedImage, clickedImageName, notification } = this.state;
+    const {
+      page,
+      visibleRows,
+      isModalOpen,
+      clickedImage,
+      clickedImageName,
+      notification,
+      nothingIsUploaded,
+    } = this.state;
     const { data } = this.props;
     const { table = [] } = data;
     const notificationText = 'Error. Please contact system administrator';
@@ -145,7 +153,7 @@ class NasaTable extends Component {
         <ImageDialog open={isModalOpen} onClose={this.handleClose} image={clickedImage} imageName={clickedImageName} />
         <div className="container">
           <div className="preloader">
-            <RingLoader loading={this.state.nothingIsUploaded} color={'white'} size={350} />
+            <RingLoader loading={nothingIsUploaded} color={'white'} size={350} />
           </div>
           {visibleRows &&
             visibleRows.map((row, i) => (
@@ -164,6 +172,12 @@ class NasaTable extends Component {
                 ></ImageCard>
               </div>
             ))}
+          {!visibleRows.length && !nothingIsUploaded && (
+            <div className="empty-message">
+              <img src="assets/img/mars.svg" />
+              <p>No images</p>
+            </div>
+          )}
         </div>
         <div className="bottom-info">
           <SortSelect isDescendingSort={this.state.isDescendingSort} sortData={this.sortData} />
